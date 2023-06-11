@@ -5,7 +5,7 @@ GapSolution::GapSolution() {}
 GapSolution::GapSolution(int n, int m) {
     this->_n = n;
     this->_m = m;
-    this->conjuntos = std::vector<std::vector<int>>(m, {});
+    this->_conjuntos = std::vector<std::vector<int>>(m, {});
 }
 
 int GapSolution::getN(){
@@ -17,7 +17,7 @@ int GapSolution::getM(){
 }
 
 void GapSolution::assign(int vendedor, int deposito) {
-    this->conjuntos[deposito].push_back(vendedor);
+    this->_conjuntos[deposito].push_back(vendedor);
 }
 
 std::ostream& operator<<(std::ostream& os, const GapSolution& solution) {

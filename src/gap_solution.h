@@ -18,7 +18,7 @@ class GapSolution
     private:
     int _n;
     int _m;
-    std::vector<std::vector<int>> conjuntos;
+    std::vector<std::vector<int>> _conjuntos;
 };
 
 #endif
