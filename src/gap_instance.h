@@ -23,4 +23,6 @@ class GapInstance
     std::vector<int> capacities; // vector de tamaño m. pos i = capacidad del deposito i.
     private:
 
-}
+};
+
+#endif

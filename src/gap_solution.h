@@ -12,4 +12,6 @@ class GapSolution
     friend std::ostream& operator<<(std::ostream& os, const GapSolution& solution);
 
     private:
-}
+};
+
+#endif
