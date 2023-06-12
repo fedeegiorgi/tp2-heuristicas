@@ -43,10 +43,9 @@ std::ostream& operator<<(std::ostream& os, const GapSolution& solution) {
     os << "Depósitos: \n";
     for (int i = 0; i < solution.getM(); i++) {
         os << i << ": ";
-        // for (int i = 0; i < solution.getM(); i++) {
             printVector(solution.getConj()[i]);
-        // }
     }
     os << std::endl;
+    // Agregar valor de funcion objetivo
     return os;
 }
