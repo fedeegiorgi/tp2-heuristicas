@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include "gap_instance.h"
+#include "gap_solution.h"
 
 int main(int argc, char** argv) {
     std::string filename = "instances/gap/gap_a/a05100";
@@ -9,6 +10,13 @@ int main(int argc, char** argv) {
     // Aca empieza la magia.
 
     GapInstance instance(filename);
+
+    GapSolution solution(instance.m, instance.n);
+
+    solution.assign(0,0);
+    solution.assign(0,5);
+
+    std::cout << solution << std::endl;
 
     // chequeo
 

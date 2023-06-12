@@ -2,10 +2,14 @@
 
 GapSolution::GapSolution() {}
 
-GapSolution::GapSolution(int n, int m) {
-    this->_n = n;
+GapSolution::GapSolution(int m, int n) {
     this->_m = m;
-    this->_conjuntos = std::vector<std::vector<int>>(m, {});
+    this->_n = n;
+    this->_conjuntos = std::vector<std::vector<int>>(m);
+
+    for (auto deposito : _conjuntos) {
+        deposito.push_back({});
+    }
 }
 
 int GapSolution::getN() const{
@@ -20,7 +24,7 @@ std::vector<std::vector<int>> GapSolution::getConj() const{
     return this->_conjuntos;
 }
 
-void GapSolution::assign(int vendedor, int deposito) {
+void GapSolution::assign(int deposito, int vendedor) {
     this->_conjuntos[deposito].push_back(vendedor);
 }
 
@@ -36,12 +40,13 @@ void printVector(const std::vector<int>& vec) {
 }
 
 std::ostream& operator<<(std::ostream& os, const GapSolution& solution) {
-    os << "depositos: ";
-    for (int i = 0; i < solution.getM(); i++)
-        os << i << " ";
-    os << std::endl;
+    os << "Depósitos: \n";
     for (int i = 0; i < solution.getM(); i++) {
-        printVector(solution.getConj()[i]);
+        os << i << ": ";
+        // for (int i = 0; i < solution.getM(); i++) {
+            printVector(solution.getConj()[i]);
+        // }
     }
+    os << std::endl;
     return os;
 }
