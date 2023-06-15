@@ -1,16 +1,13 @@
 #include "gap_solution.h"
+#include "vector"
 
 GapSolution::GapSolution() {}
 
-GapSolution::GapSolution(int m, int n, vector<int> capacities) {
+GapSolution::GapSolution(int m, int n, std::vector<int> capacities) {
     this->_m = m;
     this->_n = n;
-    this->_conjuntos = std::vector<std::vector<int>>(m);
+    this->_depositos = std::vector<std::vector<int>>(m, std::vector<int>());
     this->_currentCapacities = capacities;
-
-    for (auto deposito : _conjuntos) {
-        deposito = {};
-    }
 }
 
 int GapSolution::getN() const{
@@ -22,12 +19,11 @@ int GapSolution::getM() const{
 }
 
 std::vector<std::vector<int>> GapSolution::getConj() const{
-    return this->_conjuntos;
+    return this->_depositos;
 }
 
-void GapSolution::assign(int deposito, int vendedor, int demandaVendedor) {
-    this->_conjuntos[deposito].push_back(vendedor);
-    this->_currentCapacities[deposito] -= demandaVendedor;
+std::vector<int> GapSolution::getCurrentCapacities() const {
+    return this->_currentCapacities;
 }
 
 void printVector(const std::vector<int>& vec) {
@@ -39,6 +35,13 @@ void printVector(const std::vector<int>& vec) {
         }
     }
     std::cout << "]" << std::endl;
+}
+
+void GapSolution::assign(int deposito, int vendedor, int demandaVendedor) {
+    this->_depositos[deposito].push_back(vendedor);
+    // std::cout << "deposito " <<  deposito << std::endl;
+    // printVector(_depositos[deposito]);
+    this->_currentCapacities[deposito] -= demandaVendedor;
 }
 
 std::ostream& operator<<(std::ostream& os, const GapSolution& solution) {

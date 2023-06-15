@@ -8,18 +8,20 @@ class GapSolution
 {
     public:
     GapSolution();
-    GapSolution(int n, int m);
+    GapSolution(int n, int m, std::vector<int> capacities);
     int getN() const;
     int getM() const;
     std::vector<std::vector<int>> getConj() const;
-    void assign(int vendedor, int deposito);
+    std::vector<int> getCurrentCapacities() const;
+    void assign(int vendedor, int deposito, int demandaVendedor);
 
     friend std::ostream& operator<<(std::ostream& os, const GapSolution& solution);
 
     private:
     int _n;
     int _m;
-    std::vector<std::vector<int>> _conjuntos;
+    std::vector<std::vector<int>> _depositos;
+    std::vector<int> _currentCapacities;
 };
 
 #endif

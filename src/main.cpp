@@ -2,51 +2,54 @@
 #include <iostream>
 #include "gap_instance.h"
 #include "gap_solution.h"
+#include "gap_solver.h"
 
 int main(int argc, char** argv) {
-    std::string filename = "instances/gap/gap_a/a05100";
+    std::string filename = "instances/gap/gap_a/a05200";
     std::cout << "Reading file " << filename << std::endl;
 
     // Aca empieza la magia.
 
     GapInstance instance(filename);
 
-    GapSolution solution(instance.m, instance.n);
+    GapSolution solution(instance.m, instance.n, instance.capacities);
 
-    solution.assign(0,0);
-    solution.assign(0,5);
+    GapSolver solver(instance);
 
-    std::cout << solution << std::endl;
+    solver.HeuristicCost();
+
+    std::cout << solver.getSolution() << std::endl;
+    std::cout << solver.getObjectiveValue() << std::endl;
 
     // chequeo
 
-    std::cout << instance.m << " " << instance.n << "\n" <<std::endl;
+    // std::cout << instance.m << " " << instance.n << "\n" <<std::endl;
 
-    std::cout << "Costos: " << std::endl;
-    int i = 1;
-    for (const auto& array : instance.costs) {
-        std::cout << "Depósito " << i << std::endl;
-        for (const auto& element : array) {
-            std::cout << element << " ";
-        }
-        std::cout << std::endl;
-        i += 1;
-    }
-    std::cout << "\nDemandas: " << std::endl;
-    i = 1;
-    for (const auto& array : instance.demands) {
-        std::cout << "Depósito " << i << std::endl;
-        for (const auto& element : array) {
-            std::cout << element << " ";
-        }
-        std::cout << std::endl;
-        i += 1;
-    }
-    std::cout << "\nCapacidades: " << std::endl;
-    for (const auto& c : instance.capacities) {
-        std::cout << c << " ";
-    }
-    std::cout << std::endl;
+    // std::cout << "Costos: " << std::endl;
+    // int i = 1;
+    // for (const auto& array : instance.costs) {
+    //     std::cout << "Depósito " << i << std::endl;
+    //     for (const auto& element : array) {
+    //         std::cout << element << " ";
+    //     }
+    //     std::cout << std::endl;
+    //     i += 1;
+    // }
+    // std::cout << "\nDemandas: " << std::endl;
+    // i = 1;
+    // for (const auto& array : instance.demands) {
+    //     std::cout << "Depósito " << i << std::endl;
+    //     for (const auto& element : array) {
+    //         std::cout << element << " ";
+    //     }
+    //     std::cout << std::endl;
+    //     i += 1;
+    // }
+    // std::cout << "\nCapacidades: " << std::endl;
+    // for (const auto& c : instance.capacities) {
+    //     std::cout << c << " ";
+    // }
+    // std::cout << std::endl;
 
     return 0;
 }
