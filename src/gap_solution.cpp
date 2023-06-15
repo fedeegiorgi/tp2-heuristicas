@@ -2,13 +2,14 @@
 
 GapSolution::GapSolution() {}
 
-GapSolution::GapSolution(int m, int n) {
+GapSolution::GapSolution(int m, int n, vector<int> capacities) {
     this->_m = m;
     this->_n = n;
     this->_conjuntos = std::vector<std::vector<int>>(m);
+    this->_currentCapacities = capacities;
 
     for (auto deposito : _conjuntos) {
-        deposito.push_back({});
+        deposito = {};
     }
 }
 
@@ -24,8 +25,9 @@ std::vector<std::vector<int>> GapSolution::getConj() const{
     return this->_conjuntos;
 }
 
-void GapSolution::assign(int deposito, int vendedor) {
+void GapSolution::assign(int deposito, int vendedor, int demandaVendedor) {
     this->_conjuntos[deposito].push_back(vendedor);
+    this->_currentCapacities[deposito] -= demandaVendedor;
 }
 
 void printVector(const std::vector<int>& vec) {
