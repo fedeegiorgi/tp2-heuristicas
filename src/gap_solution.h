@@ -1,8 +1,8 @@
 #ifndef GAP_SOLUTION_H
 #define GAP_SOLUTION_H
 
-#include<vector>
-#include<iostream>
+#include <vector>
+#include <iostream>
 
 class GapSolution
 {

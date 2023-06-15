@@ -1,11 +1,11 @@
 #ifndef GAP_INSTANCE_H
 #define GAP_INSTANCE_H
 
-#include<vector>
-#include<string>
-#include<fstream>
-#include<iostream>
-#include<sstream>
+#include <vector>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 class GapInstance
 {
