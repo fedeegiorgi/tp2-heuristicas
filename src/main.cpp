@@ -5,7 +5,7 @@
 #include "gap_solver.h"
 
 int main(int argc, char** argv) {
-    std::string filename = "instances/gap/gap_a/a05200";
+    std::string filename = "instances/gap/gap_e/e40400";
     std::cout << "Reading file " << filename << std::endl;
 
     // Aca empieza la magia.
@@ -16,7 +16,9 @@ int main(int argc, char** argv) {
 
     GapSolver solver(instance);
 
-    solver.HeuristicCost();
+    // solver.bestFitHeuristic();
+    // solver.costHeuristic();
+    solver.MTHeuristic();
 
     std::cout << solver.getSolution() << std::endl;
     std::cout << solver.getObjectiveValue() << std::endl;

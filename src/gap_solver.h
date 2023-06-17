@@ -14,9 +14,9 @@ class GapSolver
     int getObjectiveValue();
     int getSolutionTime();
     GapSolution getSolution();
-    void HeuristicCost();
-    void HeuristicDemand();
-
+    void costHeuristic();
+    void bestFitHeuristic();
+    void MTHeuristic();
 /*
     void SwapLs();
     void RelocateLs();
