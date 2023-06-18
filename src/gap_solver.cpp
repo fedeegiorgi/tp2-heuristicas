@@ -25,10 +25,6 @@ GapSolution GapSolver::getSolution() {
 
 void GapSolver::costHeuristic() {
 
-    // Reinicio el objective_value y el solution_time antes de resolver el problema.
-    this->_objective_value = 0;
-    this->_solution_time = 0;
-
     // Inicializamos timer.
     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
     start = std::chrono::high_resolution_clock::now();
@@ -65,10 +61,6 @@ void GapSolver::costHeuristic() {
 }
 
 void GapSolver::bestFitHeuristic() {
-
-    // Reinicio el objective_value y el solution_time antes de resolver el problema.
-    this->_objective_value = 0;
-    this->_solution_time = 0;
 
     // Inicializamos timer.
     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
@@ -118,10 +110,6 @@ void printVectorPairs(const std::vector<std::pair<int, int>>& vec) {
 
 // Idea sacada del paper "A class of greedy algorithms"
 void GapSolver::MTHeuristic() {
-
-    // Reinicio el objective_value y el solution_time antes de resolver el problema.
-    this->_objective_value = 0;
-    this->_solution_time = 0;
 
     std::vector<std::pair<int, int>> vendedores;
     for (int j = 0; j < this->_instance.n; j++) {
