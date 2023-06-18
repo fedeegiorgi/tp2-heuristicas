@@ -17,7 +17,7 @@ class GapSolver
     void costHeuristic();
     void bestFitHeuristic();
     void MTHeuristic();
-    void SwapLs(GapSolution &feasibleSol);
+    void SwapLs(GapSolution &feasibleSol, GapInstance &instance);
 
 /*
     void RelocateLs();

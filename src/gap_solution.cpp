@@ -1,5 +1,4 @@
 #include "gap_solution.h"
-#include "vector"
 
 GapSolution::GapSolution() {}
 
@@ -39,9 +38,13 @@ void printVector(const std::vector<int>& vec) {
 
 void GapSolution::assign(int deposito, int vendedor, int demandaVendedor) {
     this->_depositos[deposito].push_back(vendedor);
-    // std::cout << "deposito " <<  deposito << std::endl;
-    // printVector(_depositos[deposito]);
     this->_currentCapacities[deposito] -= demandaVendedor;
+}
+
+void GapSolution::unassign(int deposito, int vendedor, int demandaVendedor) {
+    auto pos_vendedor = find(this->_depositos[deposito].begin(), this->_depositos[deposito].end(), vendedor);
+    this->_depositos[deposito].erase(pos_vendedor);
+    this->_currentCapacities[deposito] += demandaVendedor;
 }
 
 std::ostream& operator<<(std::ostream& os, const GapSolution& solution) {

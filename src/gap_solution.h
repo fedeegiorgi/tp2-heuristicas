@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 class GapSolution
 {
@@ -13,7 +14,8 @@ class GapSolution
     int getM() const;
     std::vector<std::vector<int>> getConj() const;
     std::vector<int> getCurrentCapacities() const;
-    void assign(int vendedor, int deposito, int demandaVendedor);
+    void assign(int deposito, int vendedor, int demandaVendedor);
+    void unassign(int deposito, int vendedor, int demandaVendedor);
 
     friend std::ostream& operator<<(std::ostream& os, const GapSolution& solution);
 

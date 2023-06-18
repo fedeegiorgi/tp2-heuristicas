@@ -16,7 +16,11 @@ int main(int argc, char** argv) {
 
     GapSolver solver(instance);
 
-    solver.bestFitHeuristic();
+    solver.costHeuristic();
+    std::cout << solver.getSolution() << std::endl;
+    std::cout << solver.getObjectiveValue() << std::endl;
+
+    solver.SwapLs(solution, instance);
     std::cout << solver.getSolution() << std::endl;
     std::cout << solver.getObjectiveValue() << std::endl;
 

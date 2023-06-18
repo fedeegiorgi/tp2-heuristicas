@@ -96,7 +96,7 @@ void GapSolver::bestFitHeuristic() {
     this->_solution_time = duration.count() * 1000;     
 }
 
-
+/*
 void printVectorPairs(const std::vector<std::pair<int, int>>& vec) {
     std::cout << "[";
     for (size_t i = 0; i < vec.size(); ++i) {
@@ -107,6 +107,7 @@ void printVectorPairs(const std::vector<std::pair<int, int>>& vec) {
     }
     std::cout << "]" << std::endl;
 }
+*/
 
 // Idea sacada del paper "A class of greedy algorithms"
 void GapSolver::MTHeuristic() {
@@ -160,28 +161,42 @@ void GapSolver::MTHeuristic() {
     }
 }
 
-void GapSolver::SwapLs(GapSolution &feasibleSol){
+void GapSolver::SwapLs(GapSolution &feasibleSol, GapInstance &instance){
     int dpivot = 0; // deposito pivote
     bool betterNeighbour = true;
     int valor_obj_actual = this->_objective_value; // feasibleSol->getObjValue();
+    std::pair<std::pair<int, int>, std::pair<int,int>> best_swap_index = {{-1,-1}, {-1,-1}};
     while (betterNeighbour){
         while (dpivot < feasibleSol.getM()-1){
             for (int vpivot; vpivot < feasibleSol.getConj()[dpivot].size(); vpivot++){ // vendedor dentro del deposito pivote.
                 int dcomp = dpivot+1; // deposito a comparar contra pivote.
                 while(dcomp < feasibleSol.getM()){ 
                     for(int vcomp; vcomp < feasibleSol.getConj()[dcomp].size(); vcomp++){ // vendedor dentro del deposito a comparar.
-                        int valor_obj_swap = valor_obj_actual -  
-
-                        // if valor_obj_actual > valor_obj_actual - costo_ij - costo_kw + costo_iw + costo_kj && capacidad_i - peso_ij + peso_iw >= 0 && capacidad_k - peso_kw + peso_kj >= 0.
-                            // valor_obj_actual = valor_obj_actual - costo_ij - costo_kw + costo_iw + costo_kj
-                            // best_swap_index = (ij, kw)
+                        int valor_obj_swap = valor_obj_actual - instance.costs[dpivot][vpivot] - instance.costs[dcomp][vcomp] + instance.costs[dpivot][vcomp] + instance.costs[dcomp][vpivot];
+                        bool capacities_fact = instance.capacities[dpivot] - instance.demands[dpivot][vpivot] + instance.demands[dpivot][vcomp] >= 0 && instance.capacities[dcomp] - instance.demands[dcomp][vcomp] + instance.demands[dcomp][vpivot] >= 0;
+                        if (valor_obj_actual > valor_obj_swap && capacities_fact){
+                            valor_obj_actual = valor_obj_swap;
+                            best_swap_index = {{dpivot, vpivot}, {dcomp, vcomp}};
+                        }
                     }
+                    dcomp += 1;
                 }
             }
+            dpivot += 1;
         }
-        // if best_swap_index != -1:
-            // swap(j,w)
-        // else:
-            // betterNeighbour = false;
+        if (best_swap_index.first.first != -1){
+            this->_objective_value = valor_obj_actual;
+            int dpivot = best_swap_index.first.first;
+            int vpivot = best_swap_index.first.second;
+            int dcomp = best_swap_index.second.first;
+            int vcomp = best_swap_index.second.second;
+            this->_solution.assign(dpivot, vcomp, instance.demands[dpivot][vcomp]);
+            this->_solution.unassign(dpivot, vpivot, instance.demands[dpivot][vpivot]);
+            this->_solution.assign(dcomp, vpivot, instance.demands[dcomp][vpivot]);
+            this->_solution.unassign(dcomp, vcomp, instance.demands[dcomp][vpivot]);
+        }
+        else {
+            betterNeighbour = false;
+        }
     }
 }
