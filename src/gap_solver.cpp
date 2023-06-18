@@ -165,8 +165,8 @@ void GapSolver::SwapLs(GapSolution &feasibleSol, GapInstance &instance){
     int dpivot = 0; // deposito pivote
     bool betterNeighbour = true;
     int valor_obj_actual = this->_objective_value; // feasibleSol->getObjValue();
-    std::pair<std::pair<int, int>, std::pair<int,int>> best_swap_index = {{-1,-1}, {-1,-1}};
     while (betterNeighbour){
+    std::pair<std::pair<int, int>, std::pair<int,int>> best_swap_index = {{-1,-1}, {-1,-1}}; 
         while (dpivot < feasibleSol.getM()-1){
             // std::cout << this->getSolution().getConj()[dpivot].size() << std::endl;
             for (int vpivot = 0; vpivot < this->getSolution().getConj()[dpivot].size(); vpivot++){ // vendedor dentro del deposito pivote.
@@ -178,7 +178,6 @@ void GapSolver::SwapLs(GapSolution &feasibleSol, GapInstance &instance){
                         int valor_obj_swap = valor_obj_actual - instance.costs[dpivot][vpivot] - instance.costs[dcomp][vcomp] + instance.costs[dpivot][vcomp] + instance.costs[dcomp][vpivot];
                         bool capacities_fact = instance.capacities[dpivot] - instance.demands[dpivot][vpivot] + instance.demands[dpivot][vcomp] >= 0 && instance.capacities[dcomp] - instance.demands[dcomp][vcomp] + instance.demands[dcomp][vpivot] >= 0;
                         if (valor_obj_actual > valor_obj_swap && capacities_fact){
-                            std::cout << "holi" << std::endl;
                             valor_obj_actual = valor_obj_swap;
                             best_swap_index = {{dpivot, vpivot}, {dcomp, vcomp}};
                         }
