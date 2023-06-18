@@ -4,6 +4,18 @@
 #include "gap_solution.h"
 #include "gap_solver.h"
 
+// para debugging --------------------------------------------------------------------------------------
+void printVecctor(const std::vector<int>& vec){
+        std::cout << "[";
+        for (size_t i = 0; i < vec.size(); ++i) {
+            std::cout << vec[i];
+            if (i != vec.size() - 1) {
+                std::cout << ", ";
+            }
+        }
+        std::cout << "]" << std::endl;
+    };
+
 int main(int argc, char** argv) {
     std::string filename = "instances/gap/gap_a/a05100";
     std::cout << "Reading file " << filename << std::endl;
@@ -19,7 +31,7 @@ int main(int argc, char** argv) {
     solver.costHeuristic();
     std::cout << solver.getSolution() << std::endl;
     std::cout << solver.getObjectiveValue() << std::endl;
-
+    
     solver.SwapLs(solution, instance);
     std::cout << solver.getSolution() << std::endl;
     std::cout << solver.getObjectiveValue() << std::endl;
