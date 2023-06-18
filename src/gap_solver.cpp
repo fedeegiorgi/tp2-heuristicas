@@ -160,3 +160,28 @@ void GapSolver::MTHeuristic() {
     }
 }
 
+void GapSolver::SwapLs(GapSolution &feasibleSol){
+    int dpivot = 0; // deposito pivote
+    bool betterNeighbour = true;
+    int valor_obj_actual = this->_objective_value; // feasibleSol->getObjValue();
+    while (betterNeighbour){
+        while (dpivot < feasibleSol.getM()-1){
+            for (int vpivot; vpivot < feasibleSol.getConj()[dpivot].size(); vpivot++){ // vendedor dentro del deposito pivote.
+                int dcomp = dpivot+1; // deposito a comparar contra pivote.
+                while(dcomp < feasibleSol.getM()){ 
+                    for(int vcomp; vcomp < feasibleSol.getConj()[dcomp].size(); vcomp++){ // vendedor dentro del deposito a comparar.
+                        int valor_obj_swap = valor_obj_actual -  
+
+                        // if valor_obj_actual > valor_obj_actual - costo_ij - costo_kw + costo_iw + costo_kj && capacidad_i - peso_ij + peso_iw >= 0 && capacidad_k - peso_kw + peso_kj >= 0.
+                            // valor_obj_actual = valor_obj_actual - costo_ij - costo_kw + costo_iw + costo_kj
+                            // best_swap_index = (ij, kw)
+                    }
+                }
+            }
+        }
+        // if best_swap_index != -1:
+            // swap(j,w)
+        // else:
+            // betterNeighbour = false;
+    }
+}
