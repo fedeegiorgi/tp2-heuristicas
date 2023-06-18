@@ -24,6 +24,11 @@ GapSolution GapSolver::getSolution() {
 }
 
 void GapSolver::costHeuristic() {
+
+    // Reinicio el objective_value y el solution_time antes de resolver el problema.
+    this->_objective_value = 0;
+    this->_solution_time = 0;
+
     // Inicializamos timer.
     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
     start = std::chrono::high_resolution_clock::now();
@@ -36,7 +41,6 @@ void GapSolver::costHeuristic() {
         int min_index = m + 1;
         
         for (int i = 0; i < m; i++){
-            // std::cout << this->_solution.getCurrentCapacities()[i] << std::endl;
             if ((this->_instance.costs[i][j] < min_cost) && (this->_solution.getCurrentCapacities()[i] >= this->_instance.demands[i][j])){
                 min_cost = this->_instance.costs[i][j];
                 min_index = i;
@@ -50,7 +54,6 @@ void GapSolver::costHeuristic() {
         else {
             this->_objective_value += this->_instance.maxCost * 3; // Sumo la penalidad de no poder asignar al vendedor.
         }
-        // std::cout << "-----" << this->getObjectiveValue() << std::endl;    
     }
 
     // Frenamos timer.
@@ -62,6 +65,11 @@ void GapSolver::costHeuristic() {
 }
 
 void GapSolver::bestFitHeuristic() {
+
+    // Reinicio el objective_value y el solution_time antes de resolver el problema.
+    this->_objective_value = 0;
+    this->_solution_time = 0;
+
     // Inicializamos timer.
     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
     start = std::chrono::high_resolution_clock::now();
@@ -111,8 +119,11 @@ void printVectorPairs(const std::vector<std::pair<int, int>>& vec) {
 // Idea sacada del paper "A class of greedy algorithms"
 void GapSolver::MTHeuristic() {
 
-    std::vector<std::pair<int, int>> vendedores;
+    // Reinicio el objective_value y el solution_time antes de resolver el problema.
+    this->_objective_value = 0;
+    this->_solution_time = 0;
 
+    std::vector<std::pair<int, int>> vendedores;
     for (int j = 0; j < this->_instance.n; j++) {
 
         int first_min = 9999; // INF
@@ -139,8 +150,6 @@ void GapSolver::MTHeuristic() {
     std::sort(vendedores.begin(), vendedores.end(), [](const auto& p1, const auto& p2) {
         return p1.second > p2.second;
     });
-
-    // printVectorPairs(vendedores);
 
     for (std::pair<int, int> k : vendedores) {
         int j = k.first;
