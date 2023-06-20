@@ -6,18 +6,18 @@
 
 // para debugging --------------------------------------------------------------------------------------
 void printVecctor(const std::vector<int>& vec){
-        std::cout << "[";
-        for (size_t i = 0; i < vec.size(); ++i) {
-            std::cout << vec[i];
-            if (i != vec.size() - 1) {
-                std::cout << ", ";
-            }
+    std::cout << "[";
+    for (size_t i = 0; i < vec.size(); ++i) {
+        std::cout << vec[i];
+        if (i != vec.size() - 1) {
+            std::cout << ", ";
         }
-        std::cout << "]" << std::endl;
-    };
+    }
+    std::cout << "]" << std::endl;
+};
 
 int main(int argc, char** argv) {
-    std::string filename = "instances/gap/gap_a/a05100";
+    std::string filename = "instances/gap/gap_a/a05200";
     std::cout << "Reading file " << filename << std::endl;
 
     // Aca empieza la magia.
@@ -29,11 +29,11 @@ int main(int argc, char** argv) {
     GapSolver solver(instance);
 
     solver.costHeuristic();
-    std::cout << solver.getSolution() << std::endl;
+    std::cout << solver.getSolution();
     std::cout << solver.getObjectiveValue() << std::endl;
     
     solver.SwapLs(solution, instance);
-    std::cout << solver.getSolution() << std::endl;
+    std::cout << solver.getSolution();
     std::cout << solver.getObjectiveValue() << std::endl;
 
 /*

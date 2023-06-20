@@ -42,8 +42,7 @@ void GapSolution::assign(int deposito, int vendedor, int demandaVendedor) {
 }
 
 void GapSolution::unassign(int deposito, int vendedor, int demandaVendedor) {
-    auto pos_vendedor = find(this->_depositos[deposito].begin(), this->_depositos[deposito].end(), vendedor);
-    this->_depositos[deposito].erase(pos_vendedor);
+    this->_depositos[deposito].erase(this->_depositos[deposito].begin() + vendedor);
     this->_currentCapacities[deposito] += demandaVendedor;
 }
 
