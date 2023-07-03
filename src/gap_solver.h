@@ -3,34 +3,34 @@
 
 #include <vector>
 #include <iostream>
+#include <algorithm>
+#include "chrono"
+
 #include "gap_solution.h"
 #include "gap_instance.h"
 
-class GapSolver
-{
+class GapSolver {
+
     public:
-    GapSolver();
-    GapSolver(GapInstance &instance);
-    int getObjectiveValue();
-    int getSolutionTime();
-    GapSolution getSolution();
-    void costHeuristic();
-    void bestFitHeuristic();
-    void MTHeuristic();
-    void SwapLs(GapSolution &feasibleSol, GapInstance &instance);
+        GapSolver();
+        GapSolver(GapInstance &instance);
+        double getObjectiveValue();
+        double getSolutionTime();
+        GapSolution getSolution();
 
-/*
-    void RelocateLs();
-    void SwapRelocate();
-    void RelocateSwap();
-    void MetaHeuristic();
-*/
-
-    private:
-    GapInstance _instance;
-    GapSolution _solution;
-    int _objective_value;
-    int _solution_time;
+        void MTHeuristic();
+        void SwapLs(GapSolution &feasibleSol, GapInstance &instance);
+    /*
+        void RelocateLs();
+        void SwapRelocate();
+        void RelocateSwap();
+        void MetaHeuristic();
+    */
+    protected:
+        GapInstance _instance;
+        GapSolution _solution;
+        double _objective_value;
+        double _solution_time;
 };
 
 #endif

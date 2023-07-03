@@ -3,6 +3,9 @@
 #include "gap_instance.h"
 #include "gap_solution.h"
 #include "gap_solver.h"
+#include "h_mincost.h"
+#include "h_bestfit.h"
+#include "h_mt.h"
 
 // para debugging --------------------------------------------------------------------------------------
 void printVecctor(const std::vector<int>& vec){
@@ -17,7 +20,7 @@ void printVecctor(const std::vector<int>& vec){
 };
 
 int main(int argc, char** argv) {
-    std::string filename = "instances/gap/gap_a/a05200";
+    std::string filename = "instances/gap/gap_a/a05100";
     std::cout << "Reading file " << filename << std::endl;
 
     // Aca empieza la magia.
@@ -28,23 +31,32 @@ int main(int argc, char** argv) {
 
     GapSolver solver(instance);
 
-    solver.costHeuristic();
-    std::cout << solver.getSolution();
-    std::cout << solver.getObjectiveValue() << std::endl;
-    
-    solver.SwapLs(solution, instance);
-    std::cout << solver.getSolution();
-    std::cout << solver.getObjectiveValue() << std::endl;
+    // MinCostHeuristic greedyMinCost(instance);
+    // greedyMinCost.solve();
+    // std::cout << greedyMinCost.getSolution();
+    // std::cout << greedyMinCost.getObjectiveValue() << std::endl;
 
-/*
-    solver.costHeuristic();
-    std::cout << solver.getSolution() << std::endl;
-    std::cout << solver.getObjectiveValue() << std::endl;
+    // BestFitHeuristic greedyBestFit(instance);
+    // greedyBestFit.solve();
+    // std::cout << greedyBestFit.getSolution();
+    // std::cout << greedyBestFit.getObjectiveValue() << std::endl;
 
-    solver.MTHeuristic();
-    std::cout << solver.getSolution() << std::endl;
-    std::cout << solver.getObjectiveValue() << std::endl;
-*/
+    MartelloTothHeuristic MT(instance);
+    MT.solve();
+    std::cout << MT.getSolution();
+    std::cout << MT.getObjectiveValue() << std::endl;
+
+    // solver.SwapLs(solution, instance);
+    // std::cout << solver.getSolution();
+    // std::cout << solver.getObjectiveValue() << std::endl;
+
+    // solver.costHeuristic();
+    // std::cout << solver.getSolution() << std::endl;
+    // std::cout << solver.getObjectiveValue() << std::endl;
+
+    // solver.MTHeuristic();
+    // std::cout << solver.getSolution() << std::endl;
+    // std::cout << solver.getObjectiveValue() << std::endl;
 
     // chequeo
 

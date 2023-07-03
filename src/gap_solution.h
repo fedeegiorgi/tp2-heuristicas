@@ -5,25 +5,29 @@
 #include <iostream>
 #include <algorithm>
 
-class GapSolution
-{
+class GapSolution {
     public:
-    GapSolution();
-    GapSolution(int n, int m, std::vector<int> capacities);
-    int getN() const;
-    int getM() const;
-    std::vector<std::vector<int>> getConj() const;
-    std::vector<int> getCurrentCapacities() const;
-    void assign(int deposito, int vendedor, int demandaVendedor);
-    void unassign(int deposito, int vendedor, int demandaVendedor);
+        GapSolution();
+        GapSolution(int n, int m, std::vector<int> capacities);
 
-    friend std::ostream& operator<<(std::ostream& os, const GapSolution& solution);
+        // getters
+        int getN() const;
+        int getM() const;
+        std::vector<std::vector<int>> getConj() const;
+        std::vector<int> getCurrentCapacities() const;
+
+        // metodos
+        void assign(int deposito, int vendedor, int demandaVendedor);
+        void unassign(int deposito, int vendedor, int demandaVendedor);
+        bool isFeasible(int deposito, int vendedor);
+
+        friend std::ostream& operator<<(std::ostream& os, const GapSolution& solution);
 
     private:
-    int _n;
-    int _m;
-    std::vector<std::vector<int>> _depositos;
-    std::vector<int> _currentCapacities;
+        int _n;
+        int _m;
+        std::vector<std::vector<int>> _depositos;
+        std::vector<int> _currentCapacities;
 };
 
 #endif
