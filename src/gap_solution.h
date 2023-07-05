@@ -19,7 +19,6 @@ class GapSolution {
         // metodos
         void assign(int deposito, int vendedor, int demandaVendedor);
         void unassign(int deposito, int vendedor, int demandaVendedor);
-        bool isFeasible(int deposito, int vendedor);
 
         friend std::ostream& operator<<(std::ostream& os, const GapSolution& solution);
 

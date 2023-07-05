@@ -17,8 +17,7 @@ class GapSolver {
         double getObjectiveValue();
         double getSolutionTime();
         GapSolution getSolution();
-
-        void MTHeuristic();
+        
         void SwapLs(GapSolution &feasibleSol, GapInstance &instance);
     /*
         void RelocateLs();
@@ -31,6 +30,7 @@ class GapSolver {
         GapSolution _solution;
         double _objective_value;
         double _solution_time;
+        bool isFeasible(int deposito, int vendedor);
 };
 
 #endif

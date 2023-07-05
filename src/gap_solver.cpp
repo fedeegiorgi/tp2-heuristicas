@@ -23,6 +23,10 @@ GapSolution GapSolver::getSolution() {
     return this->_solution;
 }
 
+bool GapSolver::isFeasible(int deposito, int vendedor) {
+    return _solution.getCurrentCapacities()[deposito] >= _instance.demands[deposito][vendedor];
+}
+
 void GapSolver::SwapLs(GapSolution &feasibleSol, GapInstance &instance){
     bool betterNeighbour = true;
     while (betterNeighbour){

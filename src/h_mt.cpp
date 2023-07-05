@@ -41,7 +41,7 @@ void MartelloTothHeuristic::solve() {
         int min_index = this->_instance.m + 1;
 
         for (int i = 0; i < this->_instance.m; i++){
-            if ((this->_instance.costs[i][j] < min_cost) && (this->_solution.getCurrentCapacities()[i] >= this->_instance.demands[i][j])){
+            if ((this->_instance.costs[i][j] < min_cost) && (isFeasible(i,j))){
                 min_cost = this->_instance.costs[i][j];
                 min_index = i;
             } 

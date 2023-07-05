@@ -13,7 +13,7 @@ void BestFitHeuristic::solve() {
 
         for (int i = 0; i < this->_instance.m; i++) {
             int remainCapacity = this->_solution.getCurrentCapacities()[i] - this->_instance.demands[i][j];
-            if ((remainCapacity >= 0) && (remainCapacity < minCapacity)) {
+            if ((isFeasible(i,j)) && (remainCapacity < minCapacity)) {
                 min_index = i;
                 minCapacity = remainCapacity;
             }
