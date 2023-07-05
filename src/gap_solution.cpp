@@ -46,6 +46,22 @@ void GapSolution::unassign(int deposito, int vendedor, int demandaVendedor) {
     this->_currentCapacities[deposito] += demandaVendedor;
 }
 
+double GapSolution::getObjValue() {
+    return this->_objective_value;
+}
+
+double GapSolution::getSolutionTime() {
+    return this->_solution_time;
+}
+
+void GapSolution::setObjValue(double objValue) {
+    this->_objective_value = objValue;
+}
+
+void GapSolution::setTime(double solutionTime) {
+    this->_solution_time = solutionTime;
+}
+
 std::ostream& operator<<(std::ostream& os, const GapSolution& solution) {
     os << "Depósitos: \n";
     for (int i = 0; i < solution.getM(); i++) {

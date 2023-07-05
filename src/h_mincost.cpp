@@ -35,5 +35,7 @@ void MinCostHeuristic::solve() {
     std::chrono::duration<double> duration = end - start;
 
     // Asignamos al tiempo que tardamos en dar la solución lo que nos marca el timer.
-    _solution_time = duration.count() * 1000; 
+    _solution_time = duration.count() * 1000;
+    _solution.setObjValue(_objective_value);
+    _solution.setTime(_solution_time);
 }

@@ -8,22 +8,22 @@ void MartelloTothHeuristic::solve() {
     start = std::chrono::high_resolution_clock::now();
 
     std::vector<std::pair<int, int>> vendedores;
-    for (int j = 0; j < this->_instance.n; j++) {
+    for (int j = 0; j < _instance.n; j++) {
 
         int first_min = 9999; // INF
         int second_min = 9999;
         int best_index = 0;
         int second_best_index = 0;
 
-        for (int i = 0; i < this->_instance.m; i++) {
-            if (this->_instance.costs[i][j] < first_min && this->_instance.costs[i][j] < second_min) {
+        for (int i = 0; i < _instance.m; i++) {
+            if (_instance.costs[i][j] < first_min && _instance.costs[i][j] < second_min) {
                 second_min = first_min;
-                first_min = this->_instance.costs[i][j];
+                first_min = _instance.costs[i][j];
                 second_best_index = best_index;
                 best_index = i;
             }
-            else if (this->_instance.costs[i][j] > first_min && this->_instance.costs[i][j] < second_min) {
-                second_min = this->_instance.costs[i][j];
+            else if (_instance.costs[i][j] > first_min && _instance.costs[i][j] < second_min) {
+                second_min = _instance.costs[i][j];
                 second_best_index = i;
             }
         }
@@ -38,20 +38,20 @@ void MartelloTothHeuristic::solve() {
     for (std::pair<int, int> k : vendedores) {
         int j = k.first;
         int min_cost = 9999; // INF
-        int min_index = this->_instance.m + 1;
+        int min_index = _instance.m + 1;
 
-        for (int i = 0; i < this->_instance.m; i++){
-            if ((this->_instance.costs[i][j] < min_cost) && (isFeasible(i,j))){
-                min_cost = this->_instance.costs[i][j];
+        for (int i = 0; i < _instance.m; i++){
+            if ((_instance.costs[i][j] < min_cost) && (isFeasible(i,j))){
+                min_cost = _instance.costs[i][j];
                 min_index = i;
             } 
         }
-        if (min_index <= this->_instance.m){
-            this->_solution.assign(min_index, j, this->_instance.demands[min_index][j]);
-            this->_objective_value += this->_instance.costs[min_index][j];
+        if (min_index <= _instance.m){
+            _solution.assign(min_index, j, _instance.demands[min_index][j]);
+            _objective_value += _instance.costs[min_index][j];
         } 
         else {
-            this->_objective_value += this->_instance.maxCost * 3; // Sumo la penalidad de no poder asignar al vendedor.
+            _objective_value += _instance.maxCost * 3; // Sumo la penalidad de no poder asignar al vendedor.
         }
     }
 
@@ -60,6 +60,7 @@ void MartelloTothHeuristic::solve() {
     std::chrono::duration<double> duration = end - start;
 
     // Asignamos al tiempo que tardamos en dar la solución lo que nos marca el timer.
-    this->_solution_time = duration.count() * 1000; 
-    
+    _solution_time = duration.count() * 1000; 
+    _solution.setObjValue(_objective_value);
+    _solution.setTime(_solution_time);
 }

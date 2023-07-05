@@ -45,6 +45,7 @@ int main(int argc, char** argv) {
     MT.solve();
     std::cout << MT.getSolution();
     std::cout << MT.getObjectiveValue() << std::endl;
+    std::cout << MT.getSolution().getSolutionTime() << std::endl;
 
     // solver.SwapLs(solution, instance);
     // std::cout << solver.getSolution();
