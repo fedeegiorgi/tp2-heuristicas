@@ -28,6 +28,8 @@ bool GapSolver::isFeasible(int deposito, int vendedor) {
 }
 
 void GapSolver::SwapLs(GapSolution &feasibleSol, GapInstance &instance){
+    _solution = feasibleSol;
+    _objective_value = feasibleSol.getObjValue();
     bool betterNeighbour = true;
     while (betterNeighbour){
         

@@ -21,13 +21,12 @@ void printVecctor(const std::vector<int>& vec){
 
 int main(int argc, char** argv) {
     std::string filename = "instances/gap/gap_a/a05100";
+    // std::string filename = "instances/real/real_instance";
     std::cout << "Reading file " << filename << std::endl;
 
     // Aca empieza la magia.
 
     GapInstance instance(filename);
-
-    GapSolution solution(instance.m, instance.n, instance.capacities);
 
     GapSolver solver(instance);
 
@@ -36,20 +35,21 @@ int main(int argc, char** argv) {
     // std::cout << greedyMinCost.getSolution();
     // std::cout << greedyMinCost.getObjectiveValue() << std::endl;
 
-    // BestFitHeuristic greedyBestFit(instance);
-    // greedyBestFit.solve();
-    // std::cout << greedyBestFit.getSolution();
-    // std::cout << greedyBestFit.getObjectiveValue() << std::endl;
+    BestFitHeuristic greedyBestFit(instance);
+    greedyBestFit.solve();
+    std::cout << greedyBestFit.getSolution();
+    std::cout << greedyBestFit.getObjectiveValue() << std::endl;
 
-    MartelloTothHeuristic MT(instance);
-    MT.solve();
-    std::cout << MT.getSolution();
-    std::cout << MT.getObjectiveValue() << std::endl;
-    std::cout << MT.getSolution().getSolutionTime() << std::endl;
+    // MartelloTothHeuristic MT(instance);
+    // MT.solve();
+    // std::cout << MT.getSolution();
+    // std::cout << MT.getObjectiveValue() << std::endl;
+    // std::cout << MT.getSolution().getSolutionTime() << std::endl;
 
-    // solver.SwapLs(solution, instance);
-    // std::cout << solver.getSolution();
-    // std::cout << solver.getObjectiveValue() << std::endl;
+    GapSolution solution_previa = greedyBestFit.getSolution();
+    solver.SwapLs(solution_previa, instance);
+    std::cout << solver.getSolution();
+    std::cout << solver.getObjectiveValue() << std::endl;
 
     // solver.costHeuristic();
     // std::cout << solver.getSolution() << std::endl;
