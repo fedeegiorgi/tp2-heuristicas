@@ -14,7 +14,7 @@ void VND::solve() {
     start = std::chrono::high_resolution_clock::now();
 
     bool didImprove = true;
-    double eps = 1e-6;
+    double eps = -1e-6;
     while (didImprove) {
         didImprove = false;
 
@@ -31,15 +31,15 @@ void VND::solve() {
                     _solution.apply_swap(best_neighbour);
                     break;
                 }
-
             }
-            else if(_ls_operators[i] == "relocate"){
 
+            else if(_ls_operators[i] == "relocate"){
                 lsRelocateOperator relocateOperator(_solution, _instance);
                 lsRelocateNeighbour best_neighbour = relocateOperator.getBestNeighbour();
+                // std::cout << "afuera " << best_neighbour.getDelta() << std::endl;
 
                 if (best_neighbour.getDelta() < eps) {
-                    std::cout << best_neighbour.getDelta() << std::endl;
+                    // std::cout << "adentro " << best_neighbour.getDelta() << std::endl;
                     didImprove = true;
                     _solution.apply_relocate(best_neighbour);
                     break;

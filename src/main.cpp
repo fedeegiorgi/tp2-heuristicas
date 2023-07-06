@@ -52,15 +52,15 @@ int main(int argc, char** argv) {
     // std::cout << MT.getSolution().getSolutionTime() << std::endl;
 
     GapSolution solution_previa = greedyBestFit.getSolution();
-    // solver.SwapLs(solution_previa, instance);
-    // std::cout << solver.getSolution();
-    // std::cout << solver.getObjectiveValue() << std::endl;
+    solver.SwapLs(solution_previa, instance);
+    std::cout << solver.getSolution();
+    std::cout << solver.getObjectiveValue() << std::endl;
 
 
-    VND metaheuristicVnd(instance, solution_previa, {"relocate"});
-    metaheuristicVnd.solve();
-    std::cout << metaheuristicVnd.getSolution();
-    std::cout << metaheuristicVnd.getObjectiveValue() << std::endl;
+    // VND metaheuristicVnd(instance, solution_previa, {"swap"});
+    // metaheuristicVnd.solve();
+    // std::cout << metaheuristicVnd.getSolution();
+    // std::cout << metaheuristicVnd.getObjectiveValue() << std::endl;
 
     // chequeo
 
