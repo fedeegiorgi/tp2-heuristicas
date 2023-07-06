@@ -89,7 +89,7 @@ std::ostream& operator<<(std::ostream& os, const GapSolution& solution) {
 }
 
 void GapSolution::apply_swap(lsSwapNeighbour bestNeighbour) {
-
+    std::cout << "use swap" << std::endl;
     // this->_solution.assign(dpivot, this->_solution.getDeposits()[dcomp][vcomp], instance.demands[dpivot][this->_solution.getDeposits()[dcomp][vcomp]]);
     // this->_solution.assign(dcomp, this->_solution.getDeposits()[dpivot][vpivot], instance.demands[dcomp][this->_solution.getDeposits()[dpivot][vpivot]]);
     // this->_solution.unassign(dpivot, this->_solution.getDeposits()[dpivot][vpivot], instance.demands[dpivot][this->_solution.getDeposits()[dpivot][vpivot]]);
@@ -100,22 +100,25 @@ void GapSolution::apply_swap(lsSwapNeighbour bestNeighbour) {
     int vend_izq = bestNeighbour._vend_izq;
     int vend_der = bestNeighbour._vend_der;
     
-    std::cout << "apply_swap" << std::endl;
-    std::cout << "Chequeo: \n" << depo_izq << ", " << vend_der << "\n"
-                        << depo_der << ", " << vend_izq << std::endl;
+    // std::cout << "apply_swap" << std::endl;
+    // std::cout << "Chequeo: \n" << depo_izq << ", " << vend_der << "\n"
+    //                     << depo_der << ", " << vend_izq << std::endl;
 
     this->assign(depo_izq, vend_der, 0);
     this->assign(depo_der, vend_izq, 0);
 
     this->unassign(depo_izq, vend_izq, 0);
     this->unassign(depo_der, vend_der, 0);
+    _objective_value += bestNeighbour.getDelta();
 }
 
 void GapSolution::apply_relocate(lsRelocateNeighbour bestNeighbour){
+    std::cout << "use relocate" << std::endl;
     int d_i = bestNeighbour._d_i;
     int d_ins = bestNeighbour._d_ins;
-    int c_j = bestNeighbour._c_j;
+    int cliente = bestNeighbour._cliente;
 
-    this->assign(d_ins, c_j, 0);
-    this->unassign(d_i, c_j, 0);
+    this->assign(d_ins, cliente, 0);
+    this->unassign(d_i, cliente, 0);
+    _objective_value += bestNeighbour.getDelta();
 }

@@ -8,39 +8,31 @@ lsRelocateOperator::lsRelocateOperator(GapSolution &feasibleSol, GapInstance &in
 }
 
 lsRelocateNeighbour lsRelocateOperator::getBestNeighbour() {
-    int d_i = 0; // deposito i
     lsRelocateNeighbour bestNeighbour(0, -1, -1, -1);
 
-    while (d_i < _solution.getM()-1){
-
-        for (int c_j = 0; c_j < _solution.getDeposits()[d_i].size(); c_j++){ // posición del cliente j dentro del deposito i.
-
-            int d_ins = 0; // deposito a insertar el cliente j
-
-            while(d_ins < _solution.getM()){ 
-
+    for (int d_i = 0; d_i < _solution.getM() - 1; d_i++) {
+        for (int c_j = 0; c_j < _solution.getDeposit(d_i).size(); c_j++) {
+            int cliente = _solution.getDeposit(d_i)[c_j];
+            for (int d_ins = 0; d_ins < _solution.getM(); d_ins++) {
                 if (d_i == d_ins) {
-                    d_ins +=1;
+                    continue;
                 }
 
-                int cliente = _solution.getDeposit(d_i)[c_j];
                 double valor_obj_Relocate = _objective_value - _instance.costs[d_i][cliente] + _instance.costs[d_ins][cliente];
 
-                if (isRelocateFeasible(d_i, d_ins, c_j)) {
-                    double delta = _objective_value - valor_obj_Relocate;
-                    lsRelocateNeighbour new_neighbour(delta, d_i, d_ins, c_j);
-                    if(bestNeighbour.getDelta() > new_neighbour.getDelta()) {
+                if (isRelocateFeasible(d_i, d_ins, cliente)) {
+                    double delta = valor_obj_Relocate - _objective_value;
+                    lsRelocateNeighbour new_neighbour(delta, d_i, d_ins, cliente);
+                    if (bestNeighbour.getDelta() > new_neighbour.getDelta()) {
                         bestNeighbour = new_neighbour;
                     }
                 }
-                d_ins += 1;
             }
         }
-        d_i += 1;
     }
     return bestNeighbour;
 }
 
-bool lsRelocateOperator::isRelocateFeasible(int d_i, int d_ins, int c_j) {
-    return _solution.getCurrentCapacities()[d_ins] + _instance.demands[d_i][c_j] >= 0;
+bool lsRelocateOperator::isRelocateFeasible(int d_i, int d_ins, int cliente) {
+    return _solution.getCurrentCapacities()[d_ins] - _instance.demands[d_i][cliente] >= 0;
 }

@@ -42,8 +42,8 @@ int main(int argc, char** argv) {
 
     BestFitHeuristic greedyBestFit(instance);
     greedyBestFit.solve();
-    std::cout << greedyBestFit.getSolution();
-    std::cout << greedyBestFit.getObjectiveValue() << std::endl;
+    // std::cout << greedyBestFit.getSolution();
+    // std::cout << greedyBestFit.getObjectiveValue() << std::endl;
 
     // MartelloTothHeuristic MT(instance);
     // MT.solve();
@@ -52,15 +52,16 @@ int main(int argc, char** argv) {
     // std::cout << MT.getSolution().getSolutionTime() << std::endl;
 
     GapSolution solution_previa = greedyBestFit.getSolution();
-    solver.SwapLs(solution_previa, instance);
-    std::cout << solver.getSolution();
-    std::cout << solver.getObjectiveValue() << std::endl;
+    // solver.SwapLs(solution_previa, instance);
+    std::cout << solution_previa << std::endl;
+    std::cout << solution_previa.getObjValue() << std::endl;
+    // std::cout << solver.getObjectiveValue() << std::endl;
 
 
-    // VND metaheuristicVnd(instance, solution_previa, {"swap"});
-    // metaheuristicVnd.solve();
-    // std::cout << metaheuristicVnd.getSolution();
-    // std::cout << metaheuristicVnd.getObjectiveValue() << std::endl;
+    VND metaheuristicVnd(instance, solution_previa, {"swap", "relocate"});
+    metaheuristicVnd.solve();
+    std::cout << metaheuristicVnd.getSolution();
+    std::cout << metaheuristicVnd.getSolution().getObjValue() << std::endl;
 
     // chequeo
 

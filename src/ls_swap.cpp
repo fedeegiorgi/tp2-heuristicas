@@ -28,7 +28,7 @@ lsSwapNeighbour lsSwapOperator::getBestNeighbour() {
                                             + _instance.costs[dpivot][vend_der] + _instance.costs[dcomp][vend_izq];
 
                     if (isSwapFeasible(dpivot, dcomp, vend_izq, vend_der)) {
-                        double delta = _objective_value - valor_obj_swap;
+                        double delta = valor_obj_swap - _objective_value;
                         lsSwapNeighbour new_neighbour(delta, dpivot, dcomp, vend_izq, vend_der);
                         if(bestNeighbour.getDelta() > new_neighbour.getDelta()) {
                             bestNeighbour = new_neighbour;

@@ -1,10 +1,10 @@
 #include "ls_relocate_neighbour.h"
 
-lsRelocateNeighbour::lsRelocateNeighbour(double delta, int d_i, int d_ins, int c_j) {
+lsRelocateNeighbour::lsRelocateNeighbour(double delta, int d_i, int d_ins, int cliente) {
     _delta = delta;
     _d_i = d_i;
     _d_ins = d_ins;
-    _c_j = c_j;
+    _cliente = cliente;
 }
 
 double lsRelocateNeighbour::getDelta() {
