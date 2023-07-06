@@ -14,7 +14,7 @@ class lsRelocateOperator : public GapSolver {
         lsRelocateNeighbour getBestNeighbour();
 
     private:
-        bool isRelocateFeasible(int d_i, int d_ins, int c_j);
+        bool isRelocateFeasible(int d_ins, int cliente);
 };  
 
 #endif

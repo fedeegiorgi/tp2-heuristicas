@@ -35,13 +35,13 @@ int main(int argc, char** argv) {
 
     // test de heuristicas constructivas
 
-    // MinCostHeuristic greedyMinCost(instance);
-    // greedyMinCost.solve();
+    MinCostHeuristic greedyMinCost(instance);
+    greedyMinCost.solve();
     // std::cout << greedyMinCost.getSolution();
     // std::cout << greedyMinCost.getObjectiveValue() << std::endl;
 
-    BestFitHeuristic greedyBestFit(instance);
-    greedyBestFit.solve();
+    // BestFitHeuristic greedyBestFit(instance);
+    // greedyBestFit.solve();
     // std::cout << greedyBestFit.getSolution();
     // std::cout << greedyBestFit.getObjectiveValue() << std::endl;
 
@@ -51,14 +51,14 @@ int main(int argc, char** argv) {
     // std::cout << MT.getObjectiveValue() << std::endl;
     // std::cout << MT.getSolution().getSolutionTime() << std::endl;
 
-    GapSolution solution_previa = greedyBestFit.getSolution();
+    GapSolution solution_previa = greedyMinCost.getSolution();
     // solver.SwapLs(solution_previa, instance);
     std::cout << solution_previa << std::endl;
     std::cout << solution_previa.getObjValue() << std::endl;
     // std::cout << solver.getObjectiveValue() << std::endl;
 
 
-    VND metaheuristicVnd(instance, solution_previa, {"swap", "relocate"});
+    VND metaheuristicVnd(instance, solution_previa, {"relocate"});
     metaheuristicVnd.solve();
     std::cout << metaheuristicVnd.getSolution();
     std::cout << metaheuristicVnd.getSolution().getObjValue() << std::endl;
