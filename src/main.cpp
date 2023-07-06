@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     // std::cout << solver.getObjectiveValue() << std::endl;
 
 
-    VND metaheuristicVnd(instance, solution_previa, {"swap"});
+    VND metaheuristicVnd(instance, solution_previa, {"relocate"});
     metaheuristicVnd.solve();
     std::cout << metaheuristicVnd.getSolution();
     std::cout << metaheuristicVnd.getObjectiveValue() << std::endl;

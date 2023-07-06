@@ -33,9 +33,18 @@ void VND::solve() {
                 }
 
             }
-            // else if(_ls_operators[i] == "relocate"){
+            else if(_ls_operators[i] == "relocate"){
 
-            // }
+                lsRelocateOperator relocateOperator(_solution, _instance);
+                lsRelocateNeighbour best_neighbour = relocateOperator.getBestNeighbour();
+
+                if (best_neighbour.getDelta() < eps) {
+                    std::cout << best_neighbour.getDelta() << std::endl;
+                    didImprove = true;
+                    _solution.apply_relocate(best_neighbour);
+                    break;
+                }
+            }
         }
         
     }

@@ -7,8 +7,10 @@
 
 #include "gap_instance.h"
 #include "ls_swap_neighbour.h"
+#include "ls_relocate_neighbour.h"
 
 class lsSwapNeighbour;
+class lsRelocateNeighbour;
 
 class GapSolution {
     public:
@@ -32,6 +34,7 @@ class GapSolution {
 
         // métodos para local search
         void apply_swap(lsSwapNeighbour bestNeighbour);
+        void apply_relocate(lsRelocateNeighbour bestNeighbour);
 
         friend std::ostream& operator<<(std::ostream& os, const GapSolution& solution);
 

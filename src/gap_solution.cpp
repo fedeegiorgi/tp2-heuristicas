@@ -110,3 +110,12 @@ void GapSolution::apply_swap(lsSwapNeighbour bestNeighbour) {
     this->unassign(depo_izq, vend_izq, 0);
     this->unassign(depo_der, vend_der, 0);
 }
+
+void GapSolution::apply_relocate(lsRelocateNeighbour bestNeighbour){
+    int d_i = bestNeighbour._d_i;
+    int d_ins = bestNeighbour._d_ins;
+    int c_j = bestNeighbour._c_j;
+
+    this->assign(d_ins, c_j, 0);
+    this->unassign(d_i, c_j, 0);
+}

@@ -13,6 +13,9 @@
 #include "ls_swap.h"
 #include "ls_swap_neighbour.h"
 
+#include "ls_relocate.h"
+#include "ls_relocate_neighbour.h"
+
 class VND : public GapSolver {
 
     public:
