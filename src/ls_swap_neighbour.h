@@ -1,0 +1,24 @@
+#ifndef LS_SWAP_NEIGHBOUR_H
+#define LS_SWAP_NEIGHBOUR_H
+
+#include "gap_solution.h"
+
+class lsSwapNeighbour {
+    public:
+        lsSwapNeighbour(double delta, int depo_izq, int depo_der, int vend_izq, int vend_der);
+        // void apply_to_solution(GapSolution &solution);
+        double getDelta();
+        // mover esto a priv desp
+        int _depo_izq;
+        int _depo_der;
+        int _vend_izq;
+        int _vend_der;
+    private:
+        double _delta;
+        bool operator<(const lsSwapNeighbour& other) const;
+        bool operator>(const lsSwapNeighbour& other) const;
+        bool operator<=(const lsSwapNeighbour& other) const;
+        bool operator>=(const lsSwapNeighbour& other) const;
+};
+
+#endif

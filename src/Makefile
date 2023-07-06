@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -std=c++17
-SRC = gap_instance.cpp gap_solution.cpp gap_solver.cpp h_mincost.cpp h_bestfit.cpp h_mt.cpp main.cpp 
+SRC = gap_instance.cpp gap_solution.cpp gap_solver.cpp h_mincost.cpp h_bestfit.cpp h_mt.cpp ls_swap_neighbour.cpp ls_swap.cpp vnd.cpp main.cpp 
 OBJ = $(SRC:.cpp=.o)
 EXEC = gap_simulator
 

@@ -5,24 +5,33 @@
 #include <iostream>
 #include <algorithm>
 
+#include "gap_instance.h"
+#include "ls_swap_neighbour.h"
+
+class lsSwapNeighbour;
+
 class GapSolution {
     public:
         GapSolution();
-        GapSolution(int n, int m, std::vector<int> capacities);
+        GapSolution(int n, int m, GapInstance &instance);
 
         // getters
         int getN() const;
         int getM() const;
-        std::vector<std::vector<int>> getConj() const;
+        std::vector<std::vector<int>> getDeposits() const;
+        std::vector<int> getDeposit(int deposit) const;
         std::vector<int> getCurrentCapacities() const;
         double getObjValue();
         double getSolutionTime();
 
-        // metodos
+        // métodos generales
         void assign(int deposito, int vendedor, int demandaVendedor);
         void unassign(int deposito, int vendedor, int demandaVendedor);
         void setObjValue(double objValue);
         void setTime(double solutionTime);
+
+        // métodos para local search
+        void apply_swap(lsSwapNeighbour bestNeighbour);
 
         friend std::ostream& operator<<(std::ostream& os, const GapSolution& solution);
 
@@ -30,6 +39,7 @@ class GapSolution {
         int _n;
         int _m;
         std::vector<std::vector<int>> _depositos;
+        GapInstance _instance;
         std::vector<int> _currentCapacities;
         double _objective_value;
         double _solution_time;

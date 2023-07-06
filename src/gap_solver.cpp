@@ -2,13 +2,11 @@
 #include "chrono"
 #include <algorithm>
 
-GapSolver::GapSolver() {}
-
 GapSolver::GapSolver(GapInstance &instance) {
     this->_instance = instance;
     this->_objective_value = 0;
     this->_solution_time = 0;
-    this->_solution = GapSolution(this->_instance.m, this->_instance.n, this->_instance.capacities);
+    this->_solution = GapSolution(this->_instance.m, this->_instance.n, this->_instance);
 }
 
 double GapSolver::getObjectiveValue() {
@@ -36,25 +34,29 @@ void GapSolver::SwapLs(GapSolution &feasibleSol, GapInstance &instance){
         std::pair<std::pair<int, int>, std::pair<int,int>> best_swap_index = {{-1,-1}, {-1,-1}}; 
         int best_obj_value = this->_objective_value; // feasibleSol->getObjValue();
         int dpivot = 0; // deposito pivote
-
+        int count = 0;
         std::cout << best_obj_value << std::endl;
         // std::cout << this->_solution << std::endl;
         // std::cout << this->_solution.getCurrentCapacities()[0] << ", " << this->_solution.getCurrentCapacities()[1] << ", " << this->_solution.getCurrentCapacities()[2] <<std::endl;
 
         while (dpivot < feasibleSol.getM()-1){
             // std::cout << this->getSolution().getConj()[dpivot].size() << std::endl;
-            for (int vpivot = 0; vpivot < this->getSolution().getConj()[dpivot].size(); vpivot++){ // vendedor dentro del deposito pivote.
+            for (int vpivot = 0; vpivot < this->getSolution().getDeposits()[dpivot].size(); vpivot++){ // vendedor dentro del deposito pivote.
                 int dcomp = dpivot+1; // deposito a comparar contra pivote.
                 // std::cout << dcomp << "," << vpivot << std::endl;
                 while(dcomp < feasibleSol.getM()){ 
                     // std::cout << dcomp << std::endl;
-                    for(int vcomp = 0; vcomp < this->getSolution().getConj()[dcomp].size(); vcomp++){ // vendedor dentro del deposito a comparar.
+                    for(int vcomp = 0; vcomp < this->getSolution().getDeposits()[dcomp].size(); vcomp++){ // vendedor dentro del deposito a comparar.
 
-                        int vpitot_i = this->_solution.getConj()[dpivot][vpivot];
-                        int vcomp_i = this->_solution.getConj()[dcomp][vcomp];
+                        int vpitot_i = this->_solution.getDeposits()[dpivot][vpivot];
+                        int vcomp_i = this->_solution.getDeposits()[dcomp][vcomp];
 
                         int valor_obj_swap = this->_objective_value - instance.costs[dpivot][vpitot_i] - instance.costs[dcomp][vcomp_i] + instance.costs[dpivot][vcomp_i] + instance.costs[dcomp][vpitot_i];
                         bool capacities_fact = (this->_solution.getCurrentCapacities()[dpivot] + instance.demands[dpivot][vpitot_i] - instance.demands[dpivot][vcomp_i] >= 0) && (this->_solution.getCurrentCapacities()[dcomp] + instance.demands[dcomp][vcomp_i] - instance.demands[dcomp][vpitot_i] >= 0);
+
+                        if(capacities_fact) {
+                            count+=1;
+                        }
 
                         if (best_obj_value > valor_obj_swap && capacities_fact){
                             // std::cout << "holi :)" << std::endl;
@@ -69,7 +71,7 @@ void GapSolver::SwapLs(GapSolution &feasibleSol, GapInstance &instance){
             }
             dpivot += 1;
         }
-
+        std::cout << "coun5: " <<count << "\n";
         if (best_swap_index.first.first != -1){
             std::cout << "holi :)" << std::endl;
             this->_objective_value = best_obj_value;
@@ -83,13 +85,19 @@ void GapSolver::SwapLs(GapSolution &feasibleSol, GapInstance &instance){
             // std::cout << best_swap_index.second.first << std::endl;
             // std::cout << best_swap_index.second.second << std::endl;
 
-            std::cout << "Vendedores que se intercambian: " << this->_solution.getConj()[dpivot][vpivot] << ", " << this->_solution.getConj()[dcomp][vcomp] << std::endl;
+            std::cout << "Vendedores que se intercambian: " << this->_solution.getDeposits()[dpivot][vpivot] << ", " << this->_solution.getDeposits()[dcomp][vcomp] << std::endl;
+            std::cout << "Chequeo: \n" << dpivot << ", " << this->_solution.getDeposits()[dcomp][vcomp] << "\n"
+                        << dcomp << ", " << this->_solution.getDeposits()[dpivot][vpivot] << std::endl;
             
-            this->_solution.assign(dpivot, this->_solution.getConj()[dcomp][vcomp], instance.demands[dpivot][this->_solution.getConj()[dcomp][vcomp]]);
-            this->_solution.assign(dcomp, this->_solution.getConj()[dpivot][vpivot], instance.demands[dcomp][this->_solution.getConj()[dpivot][vpivot]]);
+            this->_solution.assign(dpivot, this->_solution.getDeposits()[dcomp][vcomp], instance.demands[dpivot][this->_solution.getDeposits()[dcomp][vcomp]]);
+            this->_solution.assign(dcomp, this->_solution.getDeposits()[dpivot][vpivot], instance.demands[dcomp][this->_solution.getDeposits()[dpivot][vpivot]]);
 
-            this->_solution.unassign(dpivot, vpivot, instance.demands[dpivot][this->_solution.getConj()[dpivot][vpivot]]);
-            this->_solution.unassign(dcomp, vcomp, instance.demands[dcomp][this->_solution.getConj()[dcomp][vcomp]]);
+            // this->_solution.unassign(dpivot, vpivot, instance.demands[dpivot][this->_solution.getDeposits()[dpivot][vpivot]]);
+            // this->_solution.unassign(dcomp, vcomp, instance.demands[dcomp][this->_solution.getDeposits()[dcomp][vcomp]]);
+
+            // prueba
+            this->_solution.unassign(dpivot, this->_solution.getDeposits()[dpivot][vpivot], instance.demands[dpivot][this->_solution.getDeposits()[dpivot][vpivot]]);
+            this->_solution.unassign(dcomp, this->_solution.getDeposits()[dcomp][vcomp], instance.demands[dcomp][this->_solution.getDeposits()[dcomp][vcomp]]);
 
             std::cout << "Capacidades = [";    
             for(int l=0;l<this->_solution.getCurrentCapacities().size();l++){

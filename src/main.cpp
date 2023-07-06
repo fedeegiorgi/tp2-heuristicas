@@ -1,11 +1,14 @@
 #include <string>
 #include <iostream>
+#include <vector>
 #include "gap_instance.h"
 #include "gap_solution.h"
 #include "gap_solver.h"
 #include "h_mincost.h"
 #include "h_bestfit.h"
 #include "h_mt.h"
+#include "ls_swap.h"
+#include "vnd.h"
 
 // para debugging --------------------------------------------------------------------------------------
 void printVecctor(const std::vector<int>& vec){
@@ -30,6 +33,8 @@ int main(int argc, char** argv) {
 
     GapSolver solver(instance);
 
+    // test de heuristicas constructivas
+
     // MinCostHeuristic greedyMinCost(instance);
     // greedyMinCost.solve();
     // std::cout << greedyMinCost.getSolution();
@@ -47,17 +52,15 @@ int main(int argc, char** argv) {
     // std::cout << MT.getSolution().getSolutionTime() << std::endl;
 
     GapSolution solution_previa = greedyBestFit.getSolution();
-    solver.SwapLs(solution_previa, instance);
-    std::cout << solver.getSolution();
-    std::cout << solver.getObjectiveValue() << std::endl;
-
-    // solver.costHeuristic();
-    // std::cout << solver.getSolution() << std::endl;
+    // solver.SwapLs(solution_previa, instance);
+    // std::cout << solver.getSolution();
     // std::cout << solver.getObjectiveValue() << std::endl;
 
-    // solver.MTHeuristic();
-    // std::cout << solver.getSolution() << std::endl;
-    // std::cout << solver.getObjectiveValue() << std::endl;
+
+    VND metaheuristicVnd(instance, solution_previa, {"swap"});
+    metaheuristicVnd.solve();
+    std::cout << metaheuristicVnd.getSolution();
+    std::cout << metaheuristicVnd.getObjectiveValue() << std::endl;
 
     // chequeo
 
