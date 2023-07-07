@@ -15,6 +15,7 @@ class lsRelocateOperator : public GapSolver {
 
     private:
         bool isRelocateFeasible(int d_ins, int cliente);
+        
 };  
 
 #endif

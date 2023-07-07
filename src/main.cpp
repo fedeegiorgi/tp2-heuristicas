@@ -11,7 +11,7 @@
 #include "h_mt.h"
 #include "vnd.h"
 
-// para debugging ---------------------------------------------------------
+// Para debugging ---------------------------------------------------------
 void printVecctor(const std::vector<int>& vec){
     std::cout << "[";
     for (size_t i = 0; i < vec.size(); ++i) {
@@ -23,10 +23,10 @@ void printVecctor(const std::vector<int>& vec){
     std::cout << "]" << std::endl;
 };
 
-std::pair<bool,int> check_fact(GapSolution solution, GapInstance instance){
-        int costs = 0;
+std::pair<bool,double> check_fact(GapSolution solution, GapInstance instance){
+        double costs = 0;
         for (int i = 0; i < solution.getDeposits().size(); i++){
-            int demands = 0;
+            double demands = 0;
             if (i == solution.getM()){
                 for (int j = 0; j < solution.getDeposit(i).size(); j++){
                     costs += 3 * instance.maxCost;
@@ -46,14 +46,14 @@ std::pair<bool,int> check_fact(GapSolution solution, GapInstance instance){
         return {true, costs};
 }
 
-// para resultados ---------------------------------------------------------
+// Para resultados ---------------------------------------------------------
 
 struct Result {
     std::string type_instance;
     std::string instance;
     int m;
     int n;
-    // constructiva
+    // Constructiva
     double ov_mincost;
     double st_mincost;
     double ov_bestfit;
@@ -61,9 +61,9 @@ struct Result {
     double ov_mt;
     double st_mt;
 
-    // construtiva + local search
+    // Constructiva + Local Search
 
-    // mincost
+    // minCost
     double ov_mincost_relocate;
     double st_mincost_relocate;
     double ov_mincost_swap;
@@ -81,9 +81,9 @@ struct Result {
     double ov_mt_swap;
     double st_mt_swap;
 
-    // metaheuristicas VND
+    // Metaheuristicas VND
 
-    // mincost
+    // minCost
     double ov_mincost_relocate_swap;
     double st_mincost_relocate_swap;
     double ov_mincost_swap_relocate;
@@ -177,7 +177,7 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 
             // ------------------------- Local Search - Swap ------------------------------------
             std::cout << "Local Search - Swap" << std::endl;
-            // mincost
+            // minCost
             VND minCostSwap(instance, greedyMinCost.getSolution(), {"swap"});
             minCostSwap.solve();
             resultado.ov_mincost_swap = minCostSwap.getObjectiveValue();
@@ -197,7 +197,7 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 
             // ------------------------- Local Search - Relocate ------------------------------------
             std::cout << "Local Search - Relocate" << std::endl;
-            // mincost
+            // minCost
             VND minCostRelocate(instance, greedyMinCost.getSolution(), {"relocate"});
             minCostRelocate.solve();
             resultado.ov_mincost_relocate = minCostRelocate.getObjectiveValue();
@@ -217,7 +217,7 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 
             // ------------------------- VND(relocate, swap) ------------------------------------
             std::cout << "VND(relocate, swap)" << std::endl;
-            // mincost
+            // minCost
             VND minCostRelocateSwap(instance, greedyMinCost.getSolution(), {"relocate", "swap"});
             minCostRelocateSwap.solve();
             resultado.ov_mincost_relocate_swap = minCostRelocateSwap.getObjectiveValue();
@@ -237,7 +237,7 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 
             // ------------------------- VND(swap, relocate) ------------------------------------
             std::cout << "VND(swap, relocate)" << std::endl;
-            // mincost
+            // minCost
             VND minCostSwapRelocate(instance, greedyMinCost.getSolution(), {"swap", "relocate"});
             minCostSwapRelocate.solve();
             resultado.ov_mincost_swap_relocate = minCostSwapRelocate.getObjectiveValue();
@@ -261,25 +261,27 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 }
 
 int main(int argc, char** argv) {
-    // toma de resultados gap
+    // Para guardar los resultados de las instancias de testing "gap" con las distintas heuristicas descomentar las siguientes 3 lineas.
 
-    std::vector<Result> results_gap;
-    getResults("instances/gap", results_gap);
-    exportToCSV(results_gap, "output_gap.csv");
+    // std::vector<Result> results_gap;
+    // getResults("instances/gap", results_gap);
+    // exportToCSV(results_gap, "output_gap.csv");
 
-    // toma de resultados real
+    // Para guardar los resultados de la instancia real con las distintas heuristicas descomentar las siguientes 3 lineas.
 
-    std::vector<Result> results_real;
-    getResults("instances/real", results_real);
-    exportToCSV(results_real, "output_real.csv");
+    // std::vector<Result> results_real;
+    // getResults("instances/real", results_real);
+    // exportToCSV(results_real, "output_real.csv");
 
-    // correr una sola instancia
-    // std::string filename = "instances/gap/gap_b/b20200";
+    // Para probar una una sola instancia descomentar las siguientes tres lineas y las 3 lineas de la heuristica a utilizar.
+    // Para ademas usar Local Search con algun operador o VND, descomentar las lineas que definen metaheuristicVnd y en el vector de strings escribir los operadores 
+    // a usar en el orden deseado (de querer usar local search con uno solo, escribir solo el operador deseado.).
+
+    // std::string filename = "instances/real/real_instance"; // -> Insertar el path a la instancia deseada.
     // std::cout << "Reading file \n" << filename << std::endl;
-
     // GapInstance instance(filename);
 
-    // test de heuristicas constructivas
+    // Selector de Heuristica
 
     // MinCostHeuristic greedyMinCost(instance);
     // greedyMinCost.solve();
@@ -293,41 +295,15 @@ int main(int argc, char** argv) {
     // MT.solve();
     // std::cout << MT.getSolution();
 
-    // VND metaheuristicVnd(instance, MT.getSolution(), {"swap", "relocate"});
-    // metaheuristicVnd.solve();
-    // std::cout << metaheuristicVnd.getSolution();
-    // std::cout << metaheuristicVnd.getSolution().getObjValue() << std::endl;
-    // std::cout << metaheuristicVnd.getObjectiveValue() << std::endl;
+    // Selector Local Search / VND
 
-    // chequeo creación de instancia
+    // Importante, el constructor de VND recibe una instancia y una solucion. Donde esta el .getSolution() completar con la heuristica usada.
 
-    // std::cout << instance.m << " " << instance.n << "\n" <<std::endl;
+    // MESSI: Metaheuristic for Efficient Solving using Solution Improvement
 
-    // std::cout << "Costos: " << std::endl;
-    // int i = 1;
-    // for (const auto& array : instance.costs) {
-    //     std::cout << "Depósito " << i << std::endl;
-    //     for (const auto& element : array) {
-    //         std::cout << element << " ";
-    //     }
-    //     std::cout << std::endl;
-    //     i += 1;
-    // }
-    // std::cout << "\nDemandas: " << std::endl;
-    // i = 1;
-    // for (const auto& array : instance.demands) {
-    //     std::cout << "Depósito " << i << std::endl;
-    //     for (const auto& element : array) {
-    //         std::cout << element << " ";
-    //     }
-    //     std::cout << std::endl;
-    //     i += 1;
-    // }
-    // std::cout << "\nCapacidades: " << std::endl;
-    // for (const auto& c : instance.capacities) {
-    //     std::cout << c << " ";
-    // }
-    // std::cout << std::endl;
+    // VND MESSI(instance, MT.getSolution(), {"swap", "relocate"});
+    // MESSI.solve();
+    // std::cout << MESSI.getSolution();
 
     return 0;
 }

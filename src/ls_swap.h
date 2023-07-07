@@ -15,6 +15,7 @@ class lsSwapOperator : public GapSolver {
 
     private:
         bool isSwapFeasible(int dpivot, int dcomp, int vend_izq, int vend_der);
+        
 };  
 
 #endif
