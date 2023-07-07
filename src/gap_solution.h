@@ -25,7 +25,8 @@ class GapSolution {
         std::vector<int> getCurrentCapacities() const;
         double getObjValue();
         double getSolutionTime();
-
+        GapInstance _instance;
+        
         // métodos generales
         void assign(int deposito, int vendedor, int demandaVendedor);
         void unassign(int deposito, int vendedor, int demandaVendedor);
@@ -42,7 +43,7 @@ class GapSolution {
         int _n;
         int _m;
         std::vector<std::vector<int>> _depositos;
-        GapInstance _instance;
+
         std::vector<int> _currentCapacities;
         double _objective_value;
         double _solution_time;
