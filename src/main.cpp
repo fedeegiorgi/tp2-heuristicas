@@ -264,14 +264,14 @@ int main(int argc, char** argv) {
     // toma de resultados gap
 
     std::vector<Result> results_gap;
-    getResults("instances/gap/test", results_gap);
-    exportToCSV(results_gap, "output_test.csv");
+    getResults("instances/gap", results_gap);
+    exportToCSV(results_gap, "output_gap.csv");
 
     // toma de resultados real
 
-    // std::vector<Result> results_real;
-    // getResults("instances/real", results_real);
-    // exportToCSV(results_real, "output_real.csv");
+    std::vector<Result> results_real;
+    getResults("instances/real", results_real);
+    exportToCSV(results_real, "output_real.csv");
 
     // correr una sola instancia
     // std::string filename = "instances/gap/gap_b/b20200";
