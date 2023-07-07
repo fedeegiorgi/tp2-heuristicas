@@ -89,12 +89,6 @@ std::ostream& operator<<(std::ostream& os, const GapSolution& solution) {
 }
 
 void GapSolution::apply_swap(lsSwapNeighbour bestNeighbour) {
-    std::cout << "use swap" << std::endl;
-    // this->_solution.assign(dpivot, this->_solution.getDeposits()[dcomp][vcomp], instance.demands[dpivot][this->_solution.getDeposits()[dcomp][vcomp]]);
-    // this->_solution.assign(dcomp, this->_solution.getDeposits()[dpivot][vpivot], instance.demands[dcomp][this->_solution.getDeposits()[dpivot][vpivot]]);
-    // this->_solution.unassign(dpivot, this->_solution.getDeposits()[dpivot][vpivot], instance.demands[dpivot][this->_solution.getDeposits()[dpivot][vpivot]]);
-    // this->_solution.unassign(dcomp, this->_solution.getDeposits()[dcomp][vcomp], instance.demands[dcomp][this->_solution.getDeposits()[dcomp][vcomp]]);
-
     int depo_izq = bestNeighbour._depo_izq;
     int depo_der = bestNeighbour._depo_der;
     int vend_izq = bestNeighbour._vend_izq;
@@ -113,7 +107,6 @@ void GapSolution::apply_swap(lsSwapNeighbour bestNeighbour) {
 }
 
 void GapSolution::apply_relocate(lsRelocateNeighbour bestNeighbour){
-    std::cout << "use relocate" << std::endl;
     int d_i = bestNeighbour._d_i;
     int d_ins = bestNeighbour._d_ins;
     int cliente = bestNeighbour._cliente;
