@@ -30,7 +30,7 @@ std::vector<double> GapSolution::getCurrentCapacities() const {
     return this->_currentCapacities;
 }
 
-void GapSolution::assign(int deposito, int vendedor, int demandaVendedor) {
+void GapSolution::assign(int deposito, int vendedor) {
     if (deposito == this->getM()){
         this->_depositos[deposito].push_back(vendedor);
     }
@@ -41,7 +41,7 @@ void GapSolution::assign(int deposito, int vendedor, int demandaVendedor) {
     }
 }
 
-void GapSolution::unassign(int deposito, int vendedor, int demandaVendedor) {
+void GapSolution::unassign(int deposito, int vendedor) {
     if (deposito == this->getM()){
         auto it = std::find(_depositos[deposito].begin(), _depositos[deposito].end(), vendedor);
         int position;
@@ -70,6 +70,10 @@ double GapSolution::getSolutionTime() {
     return this->_solution_time;
 }
 
+GapInstance GapSolution::getInstance() {
+    return this->_instance;
+}
+
 void GapSolution::setObjValue(double objValue) {
     this->_objective_value = objValue;
 }
@@ -77,6 +81,33 @@ void GapSolution::setObjValue(double objValue) {
 void GapSolution::setTime(double solutionTime) {
     this->_solution_time = solutionTime;
 }
+
+void GapSolution::apply_swap(lsSwapNeighbour bestNeighbour) {
+    int depo_izq = bestNeighbour.depo_izq();
+    int depo_der = bestNeighbour.depo_der();
+    int vend_izq = bestNeighbour.vend_izq();
+    int vend_der = bestNeighbour.vend_der();
+
+    this->assign(depo_izq, vend_der);
+    this->assign(depo_der, vend_izq);
+    this->unassign(depo_izq, vend_izq);
+    this->unassign(depo_der, vend_der);
+
+    _objective_value += bestNeighbour.getDelta();
+}
+
+void GapSolution::apply_relocate(lsRelocateNeighbour bestNeighbour){
+    int d_i = bestNeighbour.d_i();
+    int d_ins = bestNeighbour.d_ins();
+    int cliente = bestNeighbour.cliente();
+
+    this->assign(d_ins, cliente);
+    this->unassign(d_i, cliente);
+    
+    _objective_value += bestNeighbour.getDelta();
+}
+
+// imprimir solucion
 
 void printVector(const std::vector<int>& vec) {
     std::cout << "[";
@@ -90,41 +121,18 @@ void printVector(const std::vector<int>& vec) {
 }
 
 std::ostream& operator<<(std::ostream& os, const GapSolution& solution) {
-    os << "Depósitos: \n";
+    os << "Asignación de depósitos: \n";
     for (int i = 0; i < solution.getM()+1; i++) {
-        os << i << ": ";
-            printVector(solution.getDeposits()[i]);
+        if (i == solution.getM()) {
+            os << "No asignados: ";
+        } 
+        else {
+            os << i << ": ";
+        }
+        printVector(solution.getDeposits()[i]);
     }
+    os << "Valor objetivo: " << solution._objective_value << "\n";
+    os << "Tiempo solución: " << solution._solution_time << "\n";
     os << std::endl;
-    // Agregar valor de funcion objetivo
     return os;
-}
-
-void GapSolution::apply_swap(lsSwapNeighbour bestNeighbour) {
-    int depo_izq = bestNeighbour._depo_izq;
-    int depo_der = bestNeighbour._depo_der;
-    int vend_izq = bestNeighbour._vend_izq;
-    int vend_der = bestNeighbour._vend_der;
-    
-    // std::cout << "apply_swap" << std::endl;
-    // std::cout << "Chequeo: \n" << depo_izq << ", " << vend_der << "\n"
-    //                     << depo_der << ", " << vend_izq << std::endl;
-
-    this->assign(depo_izq, vend_der, 0);
-    this->assign(depo_der, vend_izq, 0);
-    this->unassign(depo_izq, vend_izq, 0);
-    this->unassign(depo_der, vend_der, 0);
-
-    _objective_value += bestNeighbour.getDelta();
-}
-
-void GapSolution::apply_relocate(lsRelocateNeighbour bestNeighbour){
-    int d_i = bestNeighbour._d_i;
-    int d_ins = bestNeighbour._d_ins;
-    int cliente = bestNeighbour._cliente;
-
-    this->assign(d_ins, cliente, 0);
-    this->unassign(d_i, cliente, 0);
-    
-    _objective_value += bestNeighbour.getDelta();
 }

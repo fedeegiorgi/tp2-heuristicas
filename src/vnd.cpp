@@ -12,7 +12,7 @@ void VND::solve() {
     // Inicializamos timer.
     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
     start = std::chrono::high_resolution_clock::now();
-
+    
     bool didImprove = true;
     double eps = -1e-6;
     while (didImprove) {
@@ -47,4 +47,7 @@ void VND::solve() {
     // Frenamos timer.
     end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
+    _solution_time += duration.count();
+    _solution.setObjValue(_objective_value);
+    _solution.setTime(_solution_time); 
 }

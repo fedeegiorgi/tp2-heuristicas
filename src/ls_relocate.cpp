@@ -10,9 +10,13 @@ lsRelocateOperator::lsRelocateOperator(GapSolution &feasibleSol, GapInstance &in
 lsRelocateNeighbour lsRelocateOperator::getBestNeighbour() {
     lsRelocateNeighbour bestNeighbour(0, -1, -1, -1);
     double valor_obj_Relocate = 0.0;
+
     for (int d_i = 0; d_i < _solution.getM() + 1; d_i++) {
+
         for (int c_j = 0; c_j < _solution.getDeposit(d_i).size(); c_j++) {
+
             int cliente = _solution.getDeposit(d_i)[c_j];
+            
             for (int d_ins = 0; d_ins < _solution.getM()+1; d_ins++) {
                 if (d_i == d_ins) {
                     continue;

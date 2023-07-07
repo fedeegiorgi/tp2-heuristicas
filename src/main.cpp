@@ -9,7 +9,6 @@
 #include "h_mincost.h"
 #include "h_bestfit.h"
 #include "h_mt.h"
-#include "ls_swap.h"
 #include "vnd.h"
 
 // para debugging ---------------------------------------------------------
@@ -262,52 +261,44 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 }
 
 int main(int argc, char** argv) {
-    // std::vector<Result> results;
-    // getResults("instances/gap", results);
-    // exportToCSV(results, "output.csv");
+    // toma de resultados gap
 
+    // std::vector<Result> results_gap;
+    // getResults("instances/gap", results_gap);
+    // exportToCSV(results_gap, "output_gap.csv");
 
-    // std::string filename = "instances/gap/gap_a/a05100";
-    std::string filename = "instances/real/real_instance";
-    std::cout << "Reading file " << filename << std::endl;
+    // toma de resultados real
 
-    // Aca empieza la magia.
+    // std::vector<Result> results_real;
+    // getResults("instances/real/real_instance", results);
+    // exportToCSV(results_real, "output_gap.csv");
+
+    // correr una sóla instancia
+    std::string filename = "instances/gap/gap_a/a05100";
+    std::cout << "Reading file \n" << filename << std::endl;
 
     GapInstance instance(filename);
-
-    // GapSolver solver(instance);
 
     // test de heuristicas constructivas
 
     MinCostHeuristic greedyMinCost(instance);
     greedyMinCost.solve();
     // std::cout << greedyMinCost.getSolution();
-    // std::cout << greedyMinCost.getObjectiveValue() << std::endl;
 
     // BestFitHeuristic greedyBestFit(instance);
     // greedyBestFit.solve();
     // std::cout << greedyBestFit.getSolution();
-    // std::cout << greedyBestFit.getObjectiveValue() << std::endl;
 
     // MartelloTothHeuristic MT(instance);
     // MT.solve();
     // std::cout << MT.getSolution();
-    // std::cout << MT.getObjectiveValue() << std::endl;
-    // std::cout << MT.getSolution().getSolutionTime() << std::endl;
-
-    // GapSolution solution_previa = greedyMinCost.getSolution();
-    // solver.SwapLs(solution_previa, instance);
-    // std::cout << solution_previa << std::endl;
-    // std::cout << solution_previa.getObjValue() << std::endl;
-    // std::cout << solver.getObjectiveValue() << std::endl;
-
 
     VND metaheuristicVnd(instance, greedyMinCost.getSolution(), {"swap","relocate"});
     metaheuristicVnd.solve();
-    // std::cout << metaheuristicVnd.getSolution();
-    std::cout << metaheuristicVnd.getSolution().getObjValue() << std::endl;
+    std::cout << metaheuristicVnd.getSolution();
 
-    // chequeo
+
+    // chequeo creación de instanciainstancia
 
     // std::cout << instance.m << " " << instance.n << "\n" <<std::endl;
 

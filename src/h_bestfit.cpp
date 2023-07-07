@@ -20,12 +20,12 @@ void BestFitHeuristic::solve() {
         }
 
         if (minCapacity - 9999 < -1e-6) { // minCapacity < 9999
-            _solution.assign(min_index, j, _instance.demands[min_index][j]);
+            _solution.assign(min_index, j);
             _objective_value += _instance.costs[min_index][j];
         }
         else {
             _objective_value += _instance.maxCost * 3; // Sumo la penalidad de no poder asignar al vendedor.
-            _solution.assign(_solution.getM(), j, 0);
+            _solution.assign(_solution.getM(), j);
         }
     }
 
@@ -34,20 +34,7 @@ void BestFitHeuristic::solve() {
     std::chrono::duration<double> duration = end - start;
 
     // Asignamos al tiempo que tardamos en dar la solución lo que nos marca el timer.
-    _solution_time = duration.count() * 1000;
+    _solution_time = duration.count();
     _solution.setObjValue(_objective_value);
     _solution.setTime(_solution_time);     
 }
-
-/*
-void printVectorPairs(const std::vector<std::pair<int, int>>& vec) {
-    std::cout << "[";
-    for (size_t i = 0; i < vec.size(); ++i) {
-        std::cout << "(" <<vec[i].first << "," << vec[i].second << ")";
-        if (i != vec.size() - 1) {
-            std::cout << ", ";
-        }
-    }
-    std::cout << "]" << std::endl;
-}
-*/

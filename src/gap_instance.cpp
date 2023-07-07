@@ -14,7 +14,7 @@ void GapInstance::ReadFile(std::string filename){
     this->costs = std::vector<std::vector<double>>(this->m, std::vector<double>(this->n));
     this->demands = std::vector<std::vector<int>>(this->m, std::vector<int>(this->n));
     this->capacities = std::vector<double>(this->m);
-    this->maxCost = -1; // -INF
+    this->maxCost = -1;
 
     // lectura de c_ij el costo incurrido si j es asignado a i
     for (int i = 0; i < this->m; ++i) {

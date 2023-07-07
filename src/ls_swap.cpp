@@ -25,8 +25,7 @@ lsSwapNeighbour lsSwapOperator::getBestNeighbour() {
                     int vend_der = _solution.getDeposit(dcomp)[vcomp];
 
                     if (dcomp == _solution.getM()){
-                        valor_obj_swap = _objective_value - _instance.costs[dpivot][vend_izq] - _instance.maxCost*3 
-                                            + _instance.costs[dpivot][vend_der] + _instance.maxCost*3;
+                        valor_obj_swap = _objective_value - _instance.costs[dpivot][vend_izq] + _instance.costs[dpivot][vend_der];
                     }
                     else{
                         valor_obj_swap = _objective_value - _instance.costs[dpivot][vend_izq] - _instance.costs[dcomp][vend_der] 

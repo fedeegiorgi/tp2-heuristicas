@@ -11,6 +11,18 @@ double lsRelocateNeighbour::getDelta() {
     return _delta;
 }
 
+int lsRelocateNeighbour::d_i() {
+    return _d_i;
+}
+
+int lsRelocateNeighbour::d_ins() {
+    return _d_ins;
+}
+
+int lsRelocateNeighbour::cliente() {
+    return _cliente;
+}
+
 bool lsRelocateNeighbour::operator<(const lsRelocateNeighbour& other) const {
     return this->_delta - other._delta < -1e-6; // this->_delta < other._delta
 }
@@ -18,9 +30,3 @@ bool lsRelocateNeighbour::operator<(const lsRelocateNeighbour& other) const {
 bool lsRelocateNeighbour::operator>(const lsRelocateNeighbour& other) const {
     return -1e-6 > other._delta - this->_delta; // this->_delta > other._delta
 }
-// bool lsRelocateNeighbour::operator<=(const lsRelocateNeighbour& other) const {
-//     return this->_delta <= other._delta;
-// }
-// bool lsRelocateNeighbour::operator>=(const lsRelocateNeighbour& other) const {
-//     return this->_delta >= other._delta;
-// }
