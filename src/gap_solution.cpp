@@ -1,7 +1,7 @@
 #include "gap_solution.h"
 
 GapSolution::GapSolution() {}
-
+// No tiene mucho sentido que el constructor sea m,n,instancia --> hacer que sea sólo instancia
 GapSolution::GapSolution(int m, int n, GapInstance &instance) {
     this->_m = m;
     this->_n = n;

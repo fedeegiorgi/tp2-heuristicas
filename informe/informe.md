@@ -45,7 +45,7 @@ Al final de este informe, con modelos para el problema y análisis sobre los mis
 
 ## El modelo
 
-El problema será modelado mediante el Problema de Asignación Generalizada (GAP), el cual formularemos para el contexto de **ThunderPack** de la siguiente manera. Sea $N = \{1, \ldots, n\}$ el conjunto de vendedores y $M = \{1, \ldots, M\}$ el conjunto de depósitos, cada depósito $i\in M$ tiene una capacidad máxima de $c_i$. Dado un vendedor $j \in N$ y un depósito $i \in M$, $d_{ij}$ determina la demanda y $c_{ij}$ la distancia a recorrer del vendedor $j$ en caso de ser asignado al depósito $i$. Una vez definidos los elementos, podemos representar a la solución como los conjuntos $\Gamma_1, \ldots, \Gamma_m \subseteq N$, con $\Gamma_i$ el conjunto de vendedores asignados al depósito $i \in M$. Así, el problema consiste en:
+El problema será modelado mediante el Problema de Asignación Generalizada (GAP), el cual formularemos para el contexto de **ThunderPack** de la siguiente manera. Sea $N = \{1, \ldots, n\}$ el conjunto de vendedores y $M = \{1, \ldots, m\}$ el conjunto de depósitos, cada depósito $i\in M$ tiene una capacidad máxima de $c_i$. Dado un vendedor $j \in N$ y un depósito $i \in M$, $d_{ij}$ determina la demanda y $c_{ij}$ la distancia a recorrer del vendedor $j$ en caso de ser asignado al depósito $i$. Una vez definidos los elementos, podemos representar a la solución como los conjuntos $\Gamma_1, \ldots, \Gamma_m \subseteq N$, con $\Gamma_i$ el conjunto de vendedores asignados al depósito $i \in M$. Así, el problema consiste en:
 
 1. Asignar cada vendedor $j \in N$ a exáctamente un depósito $i \in M$, es decir que $, \Gamma_i \cap \Gamma_k = \emptyset \text{ si } i \neq k, i, k \in M$
 
@@ -62,8 +62,6 @@ como la distancia máxima posible a recorrer por cada vendedor. Podríamos tener
 # Heuristicas Constructivas
 
 Se pueden plantear diferentes heurísticas para resolver el problema de GAP. En principio, necesitaremos heuristicas constructivas para obtener soluciones factibles pero seguramente no óptimas en un tiempo considerablemente bajo. Para ello, proponemos tres heuristicas constructivas distintas.
-
-## Mejor ajuste (?
 
 ## Distancia mínima
 
@@ -84,6 +82,35 @@ La idea de esta heurística fue tomada del paper "A class of greedy algorithms" 
 Luego, ordenamos los vendedores en base a las diferencias calculadas y los asignamos en este orden, es decir, aquellos vendedores con mayor diferencia serán asignados a su mejor depósito primero (si es que este es aún factible). 
 
 La lógica detrás de esta heurística es que al calcular los dos mejores depósitos (en base a menor distancia) para cada vendedor y luego obtener la diferencia, podemos tener en cuenta aquellos vendedores cuyo costo de no poder ser asignados en su mejor opción (desición local) sea mayor asignándolos primero. Esto puede suponer importantes mejoras, debido a que nos aseguramos que aquellos vendedores que por capacidad se vean forzados a ir a su segundo depósito más cercano, no causarán un aumento significativo en el valor objetivo.
+
+## Mejor ajuste (?
+
+## Implementaciones y decisiones de diseño
+
+Para la implementación de estas heuristicas constructivas buscamos modularizar el problema en varias clases.
+
+En primer lugar, definimos la clase $\textit{GapInstance}$ que dado un archivo de una instancia tomo los valores y pone a disposición los valores necesarios en distintas variables para resolver el problema. Estas son: 
+- $m$: la cantidad de depósitos.
+- $n$: la cantidad de vendedores/clientes.
+- $demands$: una matriz de cuyas entradas indican la demanda correspondiente a asignar el cliente $j \in \{1,\ldots,n\}$ al depósito $i \in \{1,\ldots,m\}$.
+- $costs$: una matriz cuyas entradas indican el costo (medido en distancia) correspondiente a asignar el cliente $j \in \{1,\ldots,n\}$ al depósito $i \in \{1,\ldots,m\}$.
+- $capacities$: vector con las capacidades de los depósitos donde $|capacities| = m$.
+
+En segundo lugar, definimos la clase $\textit{GapSolution}$ que dada una $instancia$ presenta los siguientes atributos y métodos:
+- $deposits$: vector de vectores donde almacenaremos la asignación de vendedores a depósitos. Notar que definirimos un "depósito extra" para guardar los vendedores que no pudieron ser asignados.
+- $currentCapacities$: un vector donde indicamos las capadidades remanentes para cada depósito. De esta forma podremos verificar la factibilidad de las asignaciones en $O(1)$.
+- $objective_value$: valor objetivo de la solución.
+- $solution_time$: tiempo de ejecución de la solución.
+- $\textit{assign(i, j)}$: método para asignar el vendedor j al depósito i.
+- $\textit{unassign(i, j)}$: método para desasignar el vendedor j al depósito i.
+
+Por último, definimos la clase $GapSolver$ que dada una instancia crea un **instancia NO SÉ SI ES ESTA LA PALABRA CORRECTA** de $GapSolution$ y cuenta con el método $\textit{isFeasible(i, j)}$ que verifica si la asignación del vendedor $j$ al depósito $i$.
+
+La clase $GapSolver$ será la clase base de todas las clases derivadas para cada una de las heurísticas constructivas, operadores de búsqueda local y la metaheurística. Esto nos permitirá una mejor modularización de las distintas estrategias. Las clases derivadas para resolver las heurísticas constructivas son:
+
+- $MinCostHeuristic$ cuyo método $solve()$ aplica los pasos indicados previamente.
+- $BestFitHeuristic$ cuyo método $solve()$ ejecuta el procedimiento señalado anteriormente.
+- $MartelloTothHeuristic$ cuyo método $solve()$ sigue la idea de los autores.
 
 # Operadores de búsqueda local
 
