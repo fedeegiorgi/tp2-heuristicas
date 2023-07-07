@@ -281,7 +281,7 @@ int main(int argc, char** argv) {
     // std::cout << "Reading file \n" << filename << std::endl;
     // GapInstance instance(filename);
 
-    // Selector de Heuristica
+    // Selector de Heuristica Constructiva
 
     // MinCostHeuristic greedyMinCost(instance);
     // greedyMinCost.solve();
