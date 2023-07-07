@@ -218,19 +218,19 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
             // ------------------------- VND(relocate, swap) ------------------------------------
             std::cout << "VND(relocate, swap)" << std::endl;
             // mincost
-            VND minCostRelocateSwap(instance, greedyMinCost.getSolution(), {"relocate, swap"});
+            VND minCostRelocateSwap(instance, greedyMinCost.getSolution(), {"relocate", "swap"});
             minCostRelocateSwap.solve();
             resultado.ov_mincost_relocate_swap = minCostRelocateSwap.getObjectiveValue();
             resultado.st_mincost_relocate_swap = minCostRelocateSwap.getSolutionTime();
 
             // bestFit
-            VND bestFitRelocateSwap(instance, greedyBestFit.getSolution(), {"relocate, swap"});
+            VND bestFitRelocateSwap(instance, greedyBestFit.getSolution(), {"relocate", "swap"});
             bestFitRelocateSwap.solve();
             resultado.ov_bestfit_relocate_swap = bestFitRelocateSwap.getObjectiveValue();
             resultado.st_bestfit_relocate_swap = bestFitRelocateSwap.getSolutionTime();
 
             // MT
-            VND mtRelocateSwap(instance, MT.getSolution(), {"relocate, swap"});
+            VND mtRelocateSwap(instance, MT.getSolution(), {"relocate", "swap"});
             mtRelocateSwap.solve();
             resultado.ov_mt_relocate_swap = mtRelocateSwap.getObjectiveValue();
             resultado.st_mt_relocate_swap = mtRelocateSwap.getSolutionTime();
@@ -238,19 +238,19 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
             // ------------------------- VND(swap, relocate) ------------------------------------
             std::cout << "VND(swap, relocate)" << std::endl;
             // mincost
-            VND minCostSwapRelocate(instance, greedyMinCost.getSolution(), {"swap, relocate"});
+            VND minCostSwapRelocate(instance, greedyMinCost.getSolution(), {"swap", "relocate"});
             minCostSwapRelocate.solve();
             resultado.ov_mincost_swap_relocate = minCostSwapRelocate.getObjectiveValue();
             resultado.st_mincost_swap_relocate = minCostSwapRelocate.getSolutionTime();
 
             // bestFit
-            VND bestFitSwapRelocate(instance, greedyBestFit.getSolution(), {"swap, relocate"});
+            VND bestFitSwapRelocate(instance, greedyBestFit.getSolution(), {"swap", "relocate"});
             bestFitSwapRelocate.solve();
             resultado.ov_bestfit_swap_relocate = bestFitSwapRelocate.getObjectiveValue();
             resultado.st_bestfit_swap_relocate = bestFitSwapRelocate.getSolutionTime();
 
             // MT
-            VND mtSwapRelocate(instance, MT.getSolution(), {"swap, relocate"});
+            VND mtSwapRelocate(instance, MT.getSolution(), {"swap", "relocate"});
             mtSwapRelocate.solve();
             resultado.ov_mt_swap_relocate = mtSwapRelocate.getObjectiveValue();
             resultado.st_mt_swap_relocate = mtSwapRelocate.getSolutionTime();
