@@ -48,6 +48,6 @@ void VND::solve() {
     end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
     _solution_time += duration.count();
-    _solution.setObjValue(_objective_value);
     _solution.setTime(_solution_time); 
+    _objective_value = _solution.getObjValue();
 }
