@@ -25,7 +25,7 @@ void BestFitHeuristic::solve() {
         }
         else {
             _objective_value += _instance.maxCost * 3; // Sumo la penalidad de no poder asignar al vendedor.
-            std::cout << "penalidad\n";
+            _solution.assign(_solution.getM(), j, 0);
         }
     }
 
