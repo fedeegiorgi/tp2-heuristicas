@@ -53,7 +53,7 @@ struct Result {
     std::string instance;
     int m;
     int n;
-    // constructiva
+    // Constructiva
     double ov_mincost;
     double st_mincost;
     double ov_bestfit;
@@ -61,9 +61,9 @@ struct Result {
     double ov_mt;
     double st_mt;
 
-    // construtiva + local search
+    // Constructiva + Local Search
 
-    // mincost
+    // minCost
     double ov_mincost_relocate;
     double st_mincost_relocate;
     double ov_mincost_swap;
@@ -81,9 +81,9 @@ struct Result {
     double ov_mt_swap;
     double st_mt_swap;
 
-    // metaheuristicas VND
+    // Metaheuristicas VND
 
-    // mincost
+    // minCost
     double ov_mincost_relocate_swap;
     double st_mincost_relocate_swap;
     double ov_mincost_swap_relocate;
@@ -177,7 +177,7 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 
             // ------------------------- Local Search - Swap ------------------------------------
             std::cout << "Local Search - Swap" << std::endl;
-            // mincost
+            // minCost
             VND minCostSwap(instance, greedyMinCost.getSolution(), {"swap"});
             minCostSwap.solve();
             resultado.ov_mincost_swap = minCostSwap.getObjectiveValue();
@@ -197,7 +197,7 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 
             // ------------------------- Local Search - Relocate ------------------------------------
             std::cout << "Local Search - Relocate" << std::endl;
-            // mincost
+            // minCost
             VND minCostRelocate(instance, greedyMinCost.getSolution(), {"relocate"});
             minCostRelocate.solve();
             resultado.ov_mincost_relocate = minCostRelocate.getObjectiveValue();
@@ -217,7 +217,7 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 
             // ------------------------- VND(relocate, swap) ------------------------------------
             std::cout << "VND(relocate, swap)" << std::endl;
-            // mincost
+            // minCost
             VND minCostRelocateSwap(instance, greedyMinCost.getSolution(), {"relocate", "swap"});
             minCostRelocateSwap.solve();
             resultado.ov_mincost_relocate_swap = minCostRelocateSwap.getObjectiveValue();
@@ -237,7 +237,7 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 
             // ------------------------- VND(swap, relocate) ------------------------------------
             std::cout << "VND(swap, relocate)" << std::endl;
-            // mincost
+            // minCost
             VND minCostSwapRelocate(instance, greedyMinCost.getSolution(), {"swap", "relocate"});
             minCostSwapRelocate.solve();
             resultado.ov_mincost_swap_relocate = minCostSwapRelocate.getObjectiveValue();
@@ -299,9 +299,11 @@ int main(int argc, char** argv) {
 
     // Importante, el constructor de VND recibe una instancia y una solucion. Donde esta el .getSolution() completar con la heuristica usada.
 
-    // VND metaheuristicVnd(instance, MT.getSolution(), {"swap", "relocate"});
-    // metaheuristicVnd.solve();
-    // std::cout << metaheuristicVnd.getSolution();
+    // MESSI: Metaheuristic for Efficient Solving using Solution Improvement
+
+    // VND MESSI(instance, MT.getSolution(), {"swap", "relocate"});
+    // MESSI.solve();
+    // std::cout << MESSI.getSolution();
 
     return 0;
 }
