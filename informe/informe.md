@@ -63,6 +63,16 @@ como la distancia máxima posible a recorrer por cada vendedor. Podríamos tener
 
 Se pueden plantear diferentes heurísticas para resolver el problema de GAP. En principio, necesitaremos heuristicas constructivas para obtener soluciones factibles pero seguramente no óptimas en un tiempo considerablemente bajo. Para ello, proponemos tres heuristicas constructivas distintas.
 
+## Mejor ajuste
+
+La idea de esta heurística consiste en asignar a cada vendedor con el depósito factible (cuya capacidad $c_i$ sea mayor o igual a la demanda $d_{ij}$) con menor capacidad disponible en el momento de la asignación. En la implementación de la misma seguimos determinados pasos:
+1. Tomar un vendedor $j \in N$.
+2. Asignarlo al depósito $i\in M$ con menor capacidad factible. 
+4. Actualizar la capacidad $c_j$ del depósito disminuyendole la demanda $d_{ij}$ del vendedor asignado. 
+3. Repetir para todos los vendedores. 
+4. Para todos los vendedores no asignados (en el caso de que hayan), sumo la penalidad de no poder asignarlos.
+Notar que la heurística será muy útil en los casos donde el depósito con menor capacidad coincida con uno de los más cercanos al vendedor, sin embargo, en los casos donde esto no ocurra, es muy probable que determinados vendedores se queden sin asignar por la distancia máxima y por lo tanto suframos muchas penalizaciones.
+
 ## Distancia mínima
 
 La primera heuristica construcvitva que planteamos consiste en asignar a cada vendedor con el almacén que menos distancia supone, sin excedernos de su respectiva capacidad. El procedimiento de la heurística consiste en los siguientes pasos: 
@@ -82,8 +92,6 @@ La idea de esta heurística fue tomada del paper "A class of greedy algorithms" 
 Luego, ordenamos los vendedores en base a las diferencias calculadas y los asignamos en este orden, es decir, aquellos vendedores con mayor diferencia serán asignados a su mejor depósito primero (si es que este es aún factible). 
 
 La lógica detrás de esta heurística es que al calcular los dos mejores depósitos (en base a menor distancia) para cada vendedor y luego obtener la diferencia, podemos tener en cuenta aquellos vendedores cuyo costo de no poder ser asignados en su mejor opción (desición local) sea mayor asignándolos primero. Esto puede suponer importantes mejoras, debido a que nos aseguramos que aquellos vendedores que por capacidad se vean forzados a ir a su segundo depósito más cercano, no causarán un aumento significativo en el valor objetivo.
-
-## Mejor ajuste (?
 
 ## Implementaciones y decisiones de diseño
 
