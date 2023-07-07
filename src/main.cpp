@@ -24,6 +24,29 @@ void printVecctor(const std::vector<int>& vec){
     std::cout << "]" << std::endl;
 };
 
+std::pair<bool,int> check_fact(GapSolution solution, GapInstance instance){
+        int costs = 0;
+        for (int i = 0; i < solution.getDeposits().size(); i++){
+            int demands = 0;
+            if (i == solution.getM()){
+                for (int j = 0; j < solution.getDeposit(i).size(); j++){
+                    costs += 3 * instance.maxCost;
+                }
+            }
+            else{
+                for (int j = 0; j < solution.getDeposit(i).size(); j++){
+                    int cliente = solution.getDeposit(i)[j];
+                    costs += instance.costs[i][cliente];
+                    demands += instance.demands[i][cliente];
+                }
+                if (instance.capacities[i] < demands){
+                    return {false, costs};
+                }
+            }
+        }
+        return {true, costs};
+}
+
 // para resultados ---------------------------------------------------------
 
 struct Result {
