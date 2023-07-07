@@ -25,8 +25,8 @@ void MinCostHeuristic::solve() {
             _objective_value += _instance.costs[min_index][j];
         } 
         else {
+            _solution.assign(m, j, 0);
             _objective_value += _instance.maxCost * 3; // Sumo la penalidad de no poder asignar al vendedor.
-            std::cout << "penalidad\n";
         }
     }
 

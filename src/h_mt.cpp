@@ -51,6 +51,7 @@ void MartelloTothHeuristic::solve() {
             _objective_value += _instance.costs[min_index][j];
         } 
         else {
+            _solution.assign(_solution.getM(), j, 0);
             _objective_value += _instance.maxCost * 3; // Sumo la penalidad de no poder asignar al vendedor.
         }
     }
