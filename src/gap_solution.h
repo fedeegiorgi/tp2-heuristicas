@@ -22,7 +22,7 @@ class GapSolution {
         int getM() const;
         std::vector<std::vector<int>> getDeposits() const;
         std::vector<int> getDeposit(int deposit) const;
-        std::vector<int> getCurrentCapacities() const;
+        std::vector<double> getCurrentCapacities() const;
         double getObjValue();
         double getSolutionTime();
         GapInstance _instance;
@@ -44,7 +44,7 @@ class GapSolution {
         int _m;
         std::vector<std::vector<int>> _depositos;
 
-        std::vector<int> _currentCapacities;
+        std::vector<double> _currentCapacities;
         double _objective_value;
         double _solution_time;
 };

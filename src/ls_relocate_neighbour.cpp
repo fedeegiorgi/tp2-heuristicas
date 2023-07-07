@@ -12,19 +12,15 @@ double lsRelocateNeighbour::getDelta() {
 }
 
 bool lsRelocateNeighbour::operator<(const lsRelocateNeighbour& other) const {
-    return this->_delta < other._delta;
+    return this->_delta - other._delta < -1e-6; // this->_delta < other._delta
 }
 
 bool lsRelocateNeighbour::operator>(const lsRelocateNeighbour& other) const {
-    return this->_delta > other._delta;
+    return -1e-6 > other._delta - this->_delta; // this->_delta > other._delta
 }
-bool lsRelocateNeighbour::operator<=(const lsRelocateNeighbour& other) const {
-    return this->_delta <= other._delta;
-}
-bool lsRelocateNeighbour::operator>=(const lsRelocateNeighbour& other) const {
-    return this->_delta >= other._delta;
-}
-
-// void lsRelocateNeighbour::apply_to_solution(GapSolution &solution) {
-//     solution.apply_Relocate(_d_i, _d_ins, _c_j, _vend_der);
+// bool lsRelocateNeighbour::operator<=(const lsRelocateNeighbour& other) const {
+//     return this->_delta <= other._delta;
+// }
+// bool lsRelocateNeighbour::operator>=(const lsRelocateNeighbour& other) const {
+//     return this->_delta >= other._delta;
 // }

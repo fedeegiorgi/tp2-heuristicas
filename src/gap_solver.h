@@ -17,14 +17,7 @@ class GapSolver {
         double getObjectiveValue();
         double getSolutionTime();
         GapSolution getSolution();
-        
-        void SwapLs(GapSolution &feasibleSol, GapInstance &instance);
-    /*
-        void RelocateLs();
-        void SwapRelocate();
-        void RelocateSwap();
-        void MetaHeuristic();
-    */
+
     protected:
         GapInstance _instance;
         GapSolution _solution;

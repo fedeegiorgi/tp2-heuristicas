@@ -31,12 +31,10 @@ lsRelocateNeighbour lsRelocateOperator::getBestNeighbour() {
                     }
                 }
 
-                
-
                 if (isRelocateFeasible(d_ins, cliente)) {
                     double delta = valor_obj_Relocate - _objective_value;
                     lsRelocateNeighbour new_neighbour(delta, d_i, d_ins, cliente);
-                    if (bestNeighbour.getDelta() > new_neighbour.getDelta()) {
+                    if (-1e-6 > new_neighbour.getDelta() - bestNeighbour.getDelta()) { // bestNeighbour.getDelta() > new_neighbour.getDelta()
                         bestNeighbour = new_neighbour;
                     }
                 }

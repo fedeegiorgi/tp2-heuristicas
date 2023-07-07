@@ -16,8 +16,8 @@ class lsRelocateNeighbour {
     private:
         bool operator<(const lsRelocateNeighbour& other) const;
         bool operator>(const lsRelocateNeighbour& other) const;
-        bool operator<=(const lsRelocateNeighbour& other) const;
-        bool operator>=(const lsRelocateNeighbour& other) const;
+        // bool operator<=(const lsRelocateNeighbour& other) const;
+        // bool operator>=(const lsRelocateNeighbour& other) const;
 };
 
 #endif

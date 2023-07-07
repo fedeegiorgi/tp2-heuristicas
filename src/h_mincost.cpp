@@ -10,11 +10,11 @@ void MinCostHeuristic::solve() {
     int m = _instance.m;
     
     for (int j = 0; j < n; j++){
-        int min_cost = 9999; // INF
+        double min_cost = 9999; // INF
         int min_index = m + 1;
         
         for (int i = 0; i < m; i++){
-            if ((_instance.costs[i][j] < min_cost) && (isFeasible(i,j))){
+            if ((_instance.costs[i][j] - min_cost < -1e-6) && (isFeasible(i,j))) { // _instance.costs[i][j] < min_cost
                 min_cost = _instance.costs[i][j];
                 min_index = i;
             } 

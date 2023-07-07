@@ -8,18 +8,18 @@ void BestFitHeuristic::solve() {
 
     for (int j = 0; j < _instance.n; j++) {
 
-        int minCapacity = 9999; // INF
+        double minCapacity = 9999; // INF
         int min_index = 0;
 
         for (int i = 0; i < _instance.m; i++) {
-            int remainCapacity = _solution.getCurrentCapacities()[i] - _instance.demands[i][j];
-            if ((isFeasible(i,j)) && (remainCapacity < minCapacity)) {
+            double remainCapacity = _solution.getCurrentCapacities()[i] - _instance.demands[i][j];
+            if ((isFeasible(i,j)) && (remainCapacity - minCapacity < -1e-6)) { // remainCapacity < minCapacity
                 min_index = i;
                 minCapacity = remainCapacity;
             }
         }
 
-        if (minCapacity < 9999) {
+        if (minCapacity - 9999 < -1e-6) { // minCapacity < 9999
             _solution.assign(min_index, j, _instance.demands[min_index][j]);
             _objective_value += _instance.costs[min_index][j];
         }

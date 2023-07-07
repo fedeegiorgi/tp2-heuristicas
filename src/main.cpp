@@ -262,25 +262,25 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 }
 
 int main(int argc, char** argv) {
-    std::vector<Result> results;
-    getResults("instances/gap", results);
-    exportToCSV(results, "output.csv");
+    // std::vector<Result> results;
+    // getResults("instances/gap", results);
+    // exportToCSV(results, "output.csv");
 
 
     // std::string filename = "instances/gap/gap_a/a05100";
-    // std::string filename = "instances/real/real_instance";
-    // std::cout << "Reading file " << filename << std::endl;
+    std::string filename = "instances/real/real_instance";
+    std::cout << "Reading file " << filename << std::endl;
 
     // Aca empieza la magia.
 
-    // GapInstance instance(filename);
+    GapInstance instance(filename);
 
     // GapSolver solver(instance);
 
     // test de heuristicas constructivas
 
-    // MinCostHeuristic greedyMinCost(instance);
-    // greedyMinCost.solve();
+    MinCostHeuristic greedyMinCost(instance);
+    greedyMinCost.solve();
     // std::cout << greedyMinCost.getSolution();
     // std::cout << greedyMinCost.getObjectiveValue() << std::endl;
 
@@ -295,17 +295,17 @@ int main(int argc, char** argv) {
     // std::cout << MT.getObjectiveValue() << std::endl;
     // std::cout << MT.getSolution().getSolutionTime() << std::endl;
 
-    // GapSolution solution_previa = MT.getSolution();
+    // GapSolution solution_previa = greedyMinCost.getSolution();
     // solver.SwapLs(solution_previa, instance);
     // std::cout << solution_previa << std::endl;
     // std::cout << solution_previa.getObjValue() << std::endl;
     // std::cout << solver.getObjectiveValue() << std::endl;
 
 
-    // VND metaheuristicVnd(instance, greedyMinCost.getSolution(), {"relocate","swap"});
-    // metaheuristicVnd.solve();
+    VND metaheuristicVnd(instance, greedyMinCost.getSolution(), {"swap","relocate"});
+    metaheuristicVnd.solve();
     // std::cout << metaheuristicVnd.getSolution();
-    // std::cout << metaheuristicVnd.getSolution().getObjValue() << std::endl;
+    std::cout << metaheuristicVnd.getSolution().getObjValue() << std::endl;
 
     // chequeo
 

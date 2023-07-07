@@ -13,19 +13,16 @@ double lsSwapNeighbour::getDelta() {
 }
 
 bool lsSwapNeighbour::operator<(const lsSwapNeighbour& other) const {
-    return this->_delta < other._delta;
+    return this->_delta - other._delta < -1e-6; // this->_delta < other._delta
 }
 
 bool lsSwapNeighbour::operator>(const lsSwapNeighbour& other) const {
-    return this->_delta > other._delta;
-}
-bool lsSwapNeighbour::operator<=(const lsSwapNeighbour& other) const {
-    return this->_delta <= other._delta;
-}
-bool lsSwapNeighbour::operator>=(const lsSwapNeighbour& other) const {
-    return this->_delta >= other._delta;
+    return -1e-6 > other._delta - this->_delta; // this->_delta > other._delta
 }
 
-// void lsSwapNeighbour::apply_to_solution(GapSolution &solution) {
-//     solution.apply_swap(_depo_izq, _depo_der, _vend_izq, _vend_der);
+// bool lsSwapNeighbour::operator<=(const lsSwapNeighbour& other) const {
+//     return this->_delta <= other._delta;
+// }
+// bool lsSwapNeighbour::operator>=(const lsSwapNeighbour& other) const {
+//     return this->_delta >= other._delta;
 // }

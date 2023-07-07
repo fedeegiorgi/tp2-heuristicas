@@ -26,7 +26,7 @@ std::vector<int> GapSolution::getDeposit(int deposit) const {
     return this->_depositos[deposit];
 }
 
-std::vector<int> GapSolution::getCurrentCapacities() const {
+std::vector<double> GapSolution::getCurrentCapacities() const {
     return this->_currentCapacities;
 }
 
@@ -37,7 +37,6 @@ void GapSolution::assign(int deposito, int vendedor, int demandaVendedor) {
 
     else{
         this->_depositos[deposito].push_back(vendedor);
-        // this->_currentCapacities[deposito] -= demandaVendedor;
         this->_currentCapacities[deposito] -= this->_instance.demands[deposito][vendedor];
     }
 }

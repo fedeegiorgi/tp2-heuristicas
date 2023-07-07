@@ -7,41 +7,41 @@ void MartelloTothHeuristic::solve() {
     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
     start = std::chrono::high_resolution_clock::now();
 
-    std::vector<std::pair<int, int>> vendedores;
+    std::vector<std::pair<int, double>> vendedores;
     for (int j = 0; j < _instance.n; j++) {
 
-        int first_min = 9999; // INF
-        int second_min = 9999;
+        double first_min = 9999; // INF
+        double second_min = 9999;
         int best_index = 0;
         int second_best_index = 0;
 
         for (int i = 0; i < _instance.m; i++) {
-            if (_instance.costs[i][j] < first_min && _instance.costs[i][j] < second_min) {
+            if (_instance.costs[i][j] - first_min < -1e-6 && _instance.costs[i][j] - second_min < -1e-6) { // _instance.costs[i][j] < first_min && _instance.costs[i][j] < second_min
                 second_min = first_min;
                 first_min = _instance.costs[i][j];
                 second_best_index = best_index;
                 best_index = i;
             }
-            else if (_instance.costs[i][j] > first_min && _instance.costs[i][j] < second_min) {
+            else if (-1e-6 > first_min - _instance.costs[i][j] && _instance.costs[i][j] - second_min < -1e-6) { // _instance.costs[i][j] > first_min && _instance.costs[i][j] < second_min
                 second_min = _instance.costs[i][j];
                 second_best_index = i;
             }
         }
-        std::pair<int, int> vendedor(j, second_min-first_min);
+        std::pair<int, double> vendedor(j, second_min-first_min);
         vendedores.push_back(vendedor);
     }
 
     std::sort(vendedores.begin(), vendedores.end(), [](const auto& p1, const auto& p2) {
-        return p1.second > p2.second;
+        return (-1e-6 > p2.second - p1.second); // p1.second > p2.second
     });
 
     for (std::pair<int, int> k : vendedores) {
         int j = k.first;
-        int min_cost = 9999; // INF
+        double min_cost = 9999; // INF
         int min_index = _instance.m + 1;
 
         for (int i = 0; i < _instance.m; i++){
-            if ((_instance.costs[i][j] < min_cost) && (isFeasible(i,j))){
+            if ((_instance.costs[i][j] - min_cost < -1e-6) && (isFeasible(i,j))) { // _instance.costs[i][j] < min_cost) && (isFeasible(i,j)
                 min_cost = _instance.costs[i][j];
                 min_index = i;
             } 
