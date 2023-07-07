@@ -5,7 +5,7 @@ GapSolution::GapSolution() {}
 GapSolution::GapSolution(int m, int n, GapInstance &instance) {
     this->_m = m;
     this->_n = n;
-    this->_depositos = std::vector<std::vector<int>>(m, std::vector<int>());
+    this->_depositos = std::vector<std::vector<int>>((m+1), std::vector<int>());
     this->_currentCapacities = instance.capacities;
     this->_instance = instance;
 }
@@ -31,23 +31,36 @@ std::vector<int> GapSolution::getCurrentCapacities() const {
 }
 
 void GapSolution::assign(int deposito, int vendedor, int demandaVendedor) {
-    this->_depositos[deposito].push_back(vendedor);
-    // this->_currentCapacities[deposito] -= demandaVendedor;
-    this->_currentCapacities[deposito] -= this->_instance.demands[deposito][vendedor];
+    if (deposito == this->getM()){
+        this->_depositos[deposito].push_back(vendedor);
+    }
+
+    else{
+        this->_depositos[deposito].push_back(vendedor);
+        // this->_currentCapacities[deposito] -= demandaVendedor;
+        this->_currentCapacities[deposito] -= this->_instance.demands[deposito][vendedor];
+    }
 }
 
 void GapSolution::unassign(int deposito, int vendedor, int demandaVendedor) {
-    // this->_depositos[deposito].erase(this->_depositos[deposito].begin() + vendedor);
-    // this->_currentCapacities[deposito] += demandaVendedor;
-    auto it = std::find(_depositos[deposito].begin(), _depositos[deposito].end(), vendedor);
-    int position;
-    if (it != _depositos[deposito].end()) {
-        position = std::distance(_depositos[deposito].begin(), it);
+    if (deposito == this->getM()){
+        auto it = std::find(_depositos[deposito].begin(), _depositos[deposito].end(), vendedor);
+        int position;
+        if (it != _depositos[deposito].end()) {
+            position = std::distance(_depositos[deposito].begin(), it);
+        }
+        this->_depositos[deposito].erase(_depositos[deposito].begin() + position);
     }
-    this->_depositos[deposito].erase(_depositos[deposito].begin() + position);
 
-    // this->_currentCapacities[deposito] += demandaVendedor;
-    this->_currentCapacities[deposito] += this->_instance.demands[deposito][vendedor];
+    else{
+        auto it = std::find(_depositos[deposito].begin(), _depositos[deposito].end(), vendedor);
+        int position;
+        if (it != _depositos[deposito].end()) {
+            position = std::distance(_depositos[deposito].begin(), it);
+        }
+        this->_depositos[deposito].erase(_depositos[deposito].begin() + position);
+        this->_currentCapacities[deposito] += this->_instance.demands[deposito][vendedor];
+    }
 }
 
 double GapSolution::getObjValue() {
@@ -79,7 +92,7 @@ void printVector(const std::vector<int>& vec) {
 
 std::ostream& operator<<(std::ostream& os, const GapSolution& solution) {
     os << "Depósitos: \n";
-    for (int i = 0; i < solution.getM(); i++) {
+    for (int i = 0; i < solution.getM()+1; i++) {
         os << i << ": ";
             printVector(solution.getDeposits()[i]);
     }
@@ -100,9 +113,9 @@ void GapSolution::apply_swap(lsSwapNeighbour bestNeighbour) {
 
     this->assign(depo_izq, vend_der, 0);
     this->assign(depo_der, vend_izq, 0);
-
     this->unassign(depo_izq, vend_izq, 0);
     this->unassign(depo_der, vend_der, 0);
+
     _objective_value += bestNeighbour.getDelta();
 }
 
@@ -113,5 +126,6 @@ void GapSolution::apply_relocate(lsRelocateNeighbour bestNeighbour){
 
     this->assign(d_ins, cliente, 0);
     this->unassign(d_i, cliente, 0);
+    
     _objective_value += bestNeighbour.getDelta();
 }
