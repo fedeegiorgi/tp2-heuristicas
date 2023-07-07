@@ -10,6 +10,7 @@ class lsRelocateNeighbour {
         int d_i();
         int d_ins();
         int cliente();
+
     private:
         double _delta;
         int _d_i; 
@@ -17,6 +18,7 @@ class lsRelocateNeighbour {
         int _cliente; 
         bool operator<(const lsRelocateNeighbour& other) const;
         bool operator>(const lsRelocateNeighbour& other) const;
+        
 };
 
 #endif

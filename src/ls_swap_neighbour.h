@@ -4,6 +4,7 @@
 #include "gap_solution.h"
 
 class lsSwapNeighbour {
+
     public:
         lsSwapNeighbour(double delta, int depo_izq, int depo_der, int vend_izq, int vend_der);
         double getDelta();
@@ -11,6 +12,7 @@ class lsSwapNeighbour {
         int depo_der();
         int vend_izq();
         int vend_der();
+
     private:
         double _delta;
         int _depo_izq;
@@ -19,6 +21,7 @@ class lsSwapNeighbour {
         int _vend_der;
         bool operator<(const lsSwapNeighbour& other) const;
         bool operator>(const lsSwapNeighbour& other) const;
+        
 };
 
 #endif

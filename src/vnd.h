@@ -24,6 +24,7 @@ class VND : public GapSolver {
 
         void solve();
         std::vector<std::string> _ls_operators;
+        
 };
 
 

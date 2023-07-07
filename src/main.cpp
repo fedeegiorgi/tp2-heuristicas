@@ -11,7 +11,7 @@
 #include "h_mt.h"
 #include "vnd.h"
 
-// para debugging ---------------------------------------------------------
+// Para debugging ---------------------------------------------------------
 void printVecctor(const std::vector<int>& vec){
     std::cout << "[";
     for (size_t i = 0; i < vec.size(); ++i) {
@@ -23,10 +23,10 @@ void printVecctor(const std::vector<int>& vec){
     std::cout << "]" << std::endl;
 };
 
-std::pair<bool,int> check_fact(GapSolution solution, GapInstance instance){
-        int costs = 0;
+std::pair<bool,double> check_fact(GapSolution solution, GapInstance instance){
+        double costs = 0;
         for (int i = 0; i < solution.getDeposits().size(); i++){
-            int demands = 0;
+            double demands = 0;
             if (i == solution.getM()){
                 for (int j = 0; j < solution.getDeposit(i).size(); j++){
                     costs += 3 * instance.maxCost;
@@ -46,7 +46,7 @@ std::pair<bool,int> check_fact(GapSolution solution, GapInstance instance){
         return {true, costs};
 }
 
-// para resultados ---------------------------------------------------------
+// Para resultados ---------------------------------------------------------
 
 struct Result {
     std::string type_instance;
@@ -261,25 +261,27 @@ void getResults(const std::string& directoryPath, std::vector<Result> &results) 
 }
 
 int main(int argc, char** argv) {
-    // toma de resultados gap
+    // Para guardar los resultados de las instancias de testing "gap" con las distintas heuristicas descomentar las siguientes 3 lineas.
 
-    std::vector<Result> results_gap;
-    getResults("instances/gap", results_gap);
-    exportToCSV(results_gap, "output_gap.csv");
+    // std::vector<Result> results_gap;
+    // getResults("instances/gap", results_gap);
+    // exportToCSV(results_gap, "output_gap.csv");
 
-    // toma de resultados real
+    // Para guardar los resultados de la instancia real con las distintas heuristicas descomentar las siguientes 3 lineas.
 
-    std::vector<Result> results_real;
-    getResults("instances/real", results_real);
-    exportToCSV(results_real, "output_real.csv");
+    // std::vector<Result> results_real;
+    // getResults("instances/real", results_real);
+    // exportToCSV(results_real, "output_real.csv");
 
-    // correr una sola instancia
-    // std::string filename = "instances/gap/gap_b/b20200";
+    // Para probar una una sola instancia descomentar las siguientes tres lineas y las 3 lineas de la heuristica a utilizar.
+    // Para ademas usar Local Search con algun operador o VND, descomentar las lineas que definen metaheuristicVnd y en el vector de strings escribir los operadores 
+    // a usar en el orden deseado (de querer usar local search con uno solo, escribir solo el operador deseado.).
+
+    // std::string filename = "instances/real/real_instance"; // -> Insertar el path a la instancia deseada.
     // std::cout << "Reading file \n" << filename << std::endl;
-
     // GapInstance instance(filename);
 
-    // test de heuristicas constructivas
+    // Selector de Heuristica
 
     // MinCostHeuristic greedyMinCost(instance);
     // greedyMinCost.solve();
@@ -293,41 +295,13 @@ int main(int argc, char** argv) {
     // MT.solve();
     // std::cout << MT.getSolution();
 
+    // Selector Local Search / VND
+
+    // Importante, el constructor de VND recibe una instancia y una solucion. Donde esta el .getSolution() completar con la heuristica usada.
+
     // VND metaheuristicVnd(instance, MT.getSolution(), {"swap", "relocate"});
     // metaheuristicVnd.solve();
     // std::cout << metaheuristicVnd.getSolution();
-    // std::cout << metaheuristicVnd.getSolution().getObjValue() << std::endl;
-    // std::cout << metaheuristicVnd.getObjectiveValue() << std::endl;
-
-    // chequeo creación de instancia
-
-    // std::cout << instance.m << " " << instance.n << "\n" <<std::endl;
-
-    // std::cout << "Costos: " << std::endl;
-    // int i = 1;
-    // for (const auto& array : instance.costs) {
-    //     std::cout << "Depósito " << i << std::endl;
-    //     for (const auto& element : array) {
-    //         std::cout << element << " ";
-    //     }
-    //     std::cout << std::endl;
-    //     i += 1;
-    // }
-    // std::cout << "\nDemandas: " << std::endl;
-    // i = 1;
-    // for (const auto& array : instance.demands) {
-    //     std::cout << "Depósito " << i << std::endl;
-    //     for (const auto& element : array) {
-    //         std::cout << element << " ";
-    //     }
-    //     std::cout << std::endl;
-    //     i += 1;
-    // }
-    // std::cout << "\nCapacidades: " << std::endl;
-    // for (const auto& c : instance.capacities) {
-    //     std::cout << c << " ";
-    // }
-    // std::cout << std::endl;
 
     return 0;
 }
