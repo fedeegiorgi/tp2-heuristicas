@@ -34,8 +34,7 @@ ThunderPack actualmente tiene un sistema donde los vendedores eligen a que depó
 
 La empresa tiene tres preguntas que querría idealmente responder:
 
-- "¿Es suficiente la capacidad de la red de depósitos, o es necesario expandir la misma para poder
-dar respuesta a todos los vendedores?"
+- "¿Es suficiente la capacidad de la red de depósitos, o es necesario expandir la misma para poder dar respuesta a todos los vendedores?"
 - "¿Es posible encontrar una asignación donde los vendedores recorran una distancia razonable
 para entregar sus paquetes?"
 - "¿Es factible desarrollar una herramienta que nos permita experimentar con distintos escenarios
@@ -97,7 +96,7 @@ La lógica detrás de esta heurística es que al calcular los dos mejores depós
 
 Para la implementación de estas heuristicas constructivas buscamos modularizar el problema en varias clases.
 
-En primer lugar, definimos la clase $\textit{GapInstance}$ que dado un archivo de una instancia tomo los valores y pone a disposición los valores necesarios en distintas variables para resolver el problema. Estas son: 
+En primer lugar, definimos la clase $\textit{GapInstance}$ que dado un archivo de una instancia toma los valores necesarios y los pone a disposición en distintas variables para resolver el problema. Estas son: 
 - $m$: la cantidad de depósitos.
 - $n$: la cantidad de vendedores/clientes.
 - $demands$: una matriz de cuyas entradas indican la demanda correspondiente a asignar el cliente $j \in \{1,\ldots,n\}$ al depósito $i \in \{1,\ldots,m\}$.
@@ -105,14 +104,14 @@ En primer lugar, definimos la clase $\textit{GapInstance}$ que dado un archivo d
 - $capacities$: vector con las capacidades de los depósitos donde $|capacities| = m$.
 
 En segundo lugar, definimos la clase $\textit{GapSolution}$ que dada una $instancia$ presenta los siguientes atributos y métodos:
-- $deposits$: vector de vectores donde almacenaremos la asignación de vendedores a depósitos. Notar que definirimos un "depósito extra" para guardar los vendedores que no pudieron ser asignados.
+- $deposits$: vector de vectores donde almacenaremos la asignación de vendedores a depósitos. Notar que definiremos un "depósito extra" para guardar los vendedores que no pudieron ser asignados. Esto será útil a la hora de realizar busqueda local, pues tendremos en cuenta a los vendedores que no asignamos y si logramos asignar mas nos ahorraremos penalidades.
 - $currentCapacities$: un vector donde indicamos las capadidades remanentes para cada depósito. De esta forma podremos verificar la factibilidad de las asignaciones en $O(1)$.
-- $objective_value$: valor objetivo de la solución.
-- $solution_time$: tiempo de ejecución de la solución.
+- $objective\_value$: valor objetivo de la solución.
+- $solution\_time$: tiempo de ejecución de la solución.
 - $\textit{assign(i, j)}$: método para asignar el vendedor j al depósito i.
 - $\textit{unassign(i, j)}$: método para desasignar el vendedor j al depósito i.
 
-Por último, definimos la clase $GapSolver$ que dada una instancia crea un **instancia NO SÉ SI ES ESTA LA PALABRA CORRECTA** de $GapSolution$ y cuenta con el método $\textit{isFeasible(i, j)}$ que verifica si la asignación del vendedor $j$ al depósito $i$.
+Por último, definimos la clase $GapSolver$ que dada una instancia crea un objeto de tipo $GapSolution$ y cuenta con el método $\textit{isFeasible(i, j)}$ que verifica si la asignación del vendedor $j$ al depósito $i$.
 
 La clase $GapSolver$ será la clase base de todas las clases derivadas para cada una de las heurísticas constructivas, operadores de búsqueda local y la metaheurística. Esto nos permitirá una mejor modularización de las distintas estrategias. Las clases derivadas para resolver las heurísticas constructivas son:
 
@@ -144,25 +143,44 @@ con $\bar{c}_k$ la capacidad restante del depósito $k$. Luego, repetimos estos 
 
 # Metaheurística: VND
 
-La metaheurística que utilizaremos será VND (Variable Neighborhood Descent), cuya idea principal es tomar una solución inicial y buscar una mejora en la solución en diferentes vecindarios. Definimos vecindario como todas las soluciones que podemos alcanzar aplicando una vez el operador de busqueda local. La busqueda se realiza en el vecindario actual hasta que se encuentra una solución que mejore la actual. Luego, se pasa al siguiente vecindario y se repite el proceso hasta que no podamos encontrar mejoras. 
+La metaheurística que utilizaremos será VND (Variable Neighborhood Descent), cuya idea principal es tomar una solución inicial factible y buscar mejoras en la misma, recorriendo diferentes vecindarios. Definimos vecindario como todas las soluciones que podemos alcanzar aplicando una vez el operador de busqueda local. 
+
+El proceso puede describirse de la siguiente manera, empezando desde $i = 0, k=1$:
+
+1. Partimos de una solucion inicial factible $S_i$.
+2. Calculamos el vecindario $N_{op_{k}}(S_i)$.
+3. Dentro de ese vecindario buscamos el mejor cambio posible. Si no hay una mejor solucion factible, cambiamos de operador ($k + 1$), si encontramos una, la llamamos $S_{i+1}$ y volvemos a tomar $k=1$ es decir, volvemos al primer operador.
+4. Repetir desde 2. hasta que se llegue a un punto donde llegamos al último operador de nuestra lista y no se obtiene ninguna mejora.
+
 
 ## Implementación
 
-En nuestra solución, utilizaremos como operadores de busqueda local a swap y relocate. La implementación de VND realizada permite elegir el orden de aplicación de los operadores y si se utilizarán ambos o solo uno. (aca me está costando explicarlo la verdad).
+En nuestra solución, utilizaremos como operadores de busqueda local a swap y relocate. La implementación de VND realizada permite elegir el orden de aplicación de los operadores y si se utilizarán ambos o solo uno utilizando un parámetro que se le otorga a la función. Este parámetro es una lista de strings. Hay 4 listas posibles:
+- {"swap"}
+- {"relocate"}
+- {"swap", "relocate"}
+- {"relocate", "swap"}.
 
-# Evaluación comparativa de las estrategias en intancias de Benchmark
+Estas listas representan básicamente los $k$ operadores de la explicación. Si usamos una de las primeras dos, estamos haciendo solo busqueda local con "swap" o "relocate" respectivamente. Si usamos una de las últimas dos, estaremos aplicando la metaheurística VND, lo que cambia entre las listas es el orden en el que se usan los operadores, es decir, en la primera "swap" -> $k=1$, "relocate" -> $k=2$ y en la segunda el orden es al revés.
 
-Dado que la principal motivación de la formulación de diferentes alternativas de heurísticas es la reducción de las distancia recorrida por los clientes, nos proponemos, a través de experimentaciones con instancias de Benchmark para GAP, evaluar cómo se comportan en base a valor objetivo y tiempo.
+Ambas listas son posibles en nuestra función pues como veremos en el análisis tanto de las instancias de benchmark como en la real, en este caso el orden de los factores **si** altera el producto.
+
+# Evaluación comparativa de las estrategias en instancias de Benchmark
+
+Dado que la principal motivación de la formulación de diferentes alternativas de heurísticas es la reducción de las distancias recorridas por los clientes (con un tiempo de ejecución razonable), nos proponemos, a través de experimentaciones con instancias de Benchmark para GAP, evaluar cómo se comportan en base a valor objetivo y tiempo.
 
 ## Experimentación
 
 Para comparar las distintas estrategias entre sí definimos las siguientes métricas:
 
--   %cost_gap: diferencia porcentual relativa de la estrategia batching sobre la greedy en base a los costos.
+-   $estrategia_i\_vs\_estrategia_j$%: diferencia porcentual relativa en base a los costos.
 
--   %time_gap: diferencia porcentual relativa de la estrategia batching sobre la greedy en base al tiempo de ejecución.
+    - Es relativa a $estrategia_i$ por lo que $estrategia_j$ es mejor si el valor es positivo y es peor si el valor es negativo.
 
-## Hipotesis
+
+-   Tiempo de ejecución en segundos.
+
+## Hipótesis
 
 Planteamos como hipótesis que el operador relocate por si solo probablemente nunca genere ninguna mejora en soluciones generadas por la heurística de distancia mínima, debido a que su función a grandes rasgos es revisar si hay algún depósito factible más cercano al asignado, pero esto no ocurrirá debido a que el funcionamiento de la heurística constructiva es exactamente ese, por lo que si existiese dicho depósito, ya se habría asignado previamente.
 El operador relocate es especialmente útil para poder asignar los vendedores que no fue posible asignar a ningún depósito previamente, teniendo la posibilidad de evitar la alta penalización que estos suponían. 
@@ -171,7 +189,7 @@ El operador relocate es especialmente útil para poder asignar los vendedores qu
 
 ###  Comparativa de constructivas:
 
-{bla, bla}
+{interpretar un poco la tabla}
 
 | type_instance   |   ov_mincost_vs_bestfit% |   ov_mincost_vs_mt% |   ov_mt_vs_bestfit% |
 |:----------------|-------------------------:|--------------------:|--------------------:|
@@ -181,7 +199,7 @@ El operador relocate es especialmente útil para poder asignar los vendedores qu
 
 ### Swap vs. Relocate
 
-{bla, bla}
+{interpretar un poco la tabla}
 
 Cada constructiva vs Relocate:
 
@@ -203,6 +221,8 @@ Cada constructiva vs Swap:
 
 ### Swap vs. VND_1 (relocate, swap)
 
+{interpretar un poco la tabla}
+
 | type_instance   |   mincost_swap_vs_VND1% |   bestfit_swap_vs_VND1% |   mt_swap__vsVND1% |
 |:----------------|------------------------:|------------------------:|-------------------:|
 | a               |             0.000395507 |               0.0722756 |          0         |
@@ -210,6 +230,8 @@ Cada constructiva vs Swap:
 | e               |             0.0574338   |               0.077536  |          0.0460814 |
 
 ### Swap vs. VND_2 (swap, relocate)
+
+{interpretar un poco la tabla}
 
 | type_instance   |   mincost_swap_vs_VND2% |   bestfit_swap_vs_VND2% |   mt_swap__vsVND2% |
 |:----------------|------------------------:|------------------------:|-------------------:|
@@ -219,7 +241,7 @@ Cada constructiva vs Swap:
 
 ### Tiempos de ejecución
 
-Para instancias con $m = 1600$.
+Para instancias con $n = 1600$ (las otras instancias son muy pequeñas y no cercanas a la instancia real, por lo que realizamos nuestros testeos usando las instancias de benchmark mas grandes.).
 
 MinCostHeuristic:
 
@@ -245,9 +267,13 @@ MTHeuristic:
 |  40 |  0.00637205 |          73.6666 |           0.0138893  |                   67.6196 |                   74.313  |
 |  80 |  0.0123502  |          88.5029 |           0.0271206  |                   83.8109 |                   93.7482 |
 
+{interprete pibe}
+
 # Evaluación comparativa de las estrategias en intancia real
 
 ## Experimentación
+
+Utilizamos las mismas métricas que en benchmarking. Analizaremos los resultados en base a gráficos de lo obtenido con la instancia real.
 
 ## Discusión y análisis de resultados
 
@@ -256,3 +282,50 @@ MTHeuristic:
 ![Comparación instancia real partiendo de BestFitHeuristic](media/bestfit_real.png)
 
 ![Comparación instancia real partiendo de MTHeuristic](media/mt_real.png)
+
+# Conclusión 
+
+## Las preguntas de la empresa
+
+Al inicio de este informe mencionamos las preguntas que quería responder la empresa:
+
+- "¿Es suficiente la capacidad de la red de depósitos, o es necesario expandir la misma para poder dar respuesta a todos los vendedores?"
+- "¿Es posible encontrar una asignación donde los vendedores recorran una distancia razonable
+para entregar sus paquetes?"
+- "¿Es factible desarrollar una herramienta que nos permita experimentar con distintos escenarios y obtener soluciones de buena calidad en unos pocos minutos?"
+
+Tras múltiples estrategias propuestas y testeo con las mismas, nos encontramos aptos para responder estas preguntas.
+
+## Las respuestas
+
+En primer lugar, resolveremos el tema capacidad. Al utilizar las instancias de benchmarking si logramos ver como la capacidad podía ser un problema, ya que en varios casos nos encontrabamos con que nuestro "depósito" de no asignados contenía bastantes vendedores. Sin embargo, en la instancia real, pudimos ver como con ninguna de las estrategias aplicadas había vendedores no asignados, por lo que podemos afirmar que, al menos por el momento, pues la cantidad de vendedores podría escalar eventualmente, no es necesario expandir la capacidad de la red de depósitos.
+
+En cuanto a si es posible encontrar una asignación donde los vendedores recorran una distancia razonable, podemos ver en los gráficos que la estrategia que dio mejor resultado tiene un valor objetivo, proveniente de la suma de distancias recorridas, de 710km. Teniendo en cuenta que la instancia real tiene 1100 vendedores, un vendedor en promedio recorre $\frac{710}{1100}_{km} = 0.645_{km} \approx 650_m$, lo cual es bastante razonable.
+
+Sin embargo, si encontrar esta solución llevase mucho tiempo, podría no solucionar los problemas de la empresa. Sin embargo, podemos observar como con la mejor estrategia tenemos un tiempo de cómputo de menos de 1', y esto teniendo en cuenta el contexto de estar testeando en una computadora promedio, lo cual es mas que razonable teniendo en cuenta que estamos planificando una asignación de 1100 vendedores a 310 depósitos posibles y que no necesitamos estar realizandolo constantemente en tiempo real (y aún así, de necesitarlo, un vendedor no debería tener problema en esperar 1 minuto si esto además implica recorrer una distancia menor). 
+
+Por lo tanto, en respuesta a la pregunta de si es factible desarrollar una herramienta que permita experimentar en distintos escenarios y obtener buenas soluciones en cuestion de pocos minutos, podemos decir que sí, ya que anteriormente vimos como las soluciones obtenidas son muy razonables y el tiempo de cómputo no es muy grande (de necesitar reducirlo aún mas se podrían correr directamente heurísticas como la de MT que vimos han tardado hasta menos de 1s en instancias relativamente grandes, obteniendo buenas soluciones, aunque no tan buenas como las que tardan un poco mas).
+
+## En conclusión
+A lo largo del trabajo y reflejado en este informe, hemos visto distintas maneras de afrontar el $GAP$ y lo hemos relacionado directamente con el problema de la empresa **ThunderPack**. 
+
+Hemos visto como es factible resolverlo, aún en instancias reales (que suelen ser mas grandes y por ende complicadas), en tiempo razonable y obteniendo soluciones de buena calidad. 
+
+De esta manera, poniendonos en el rol de consultores de la empresa, recomendaríamos el cambio que planeaban de su modalidad anterior a una modalidad centralizada, pues consideramos que generaría un uso mas eficiente de la red de depósitos y por consiguiente, una reducción en los costos logísticos y operativos resultando en mayores beneficios para la empresa.
+
+# Instrucciones de compilación y ejecución.
+
+## Compilación
+
+Dentro de la carpeta "src" se encuentran los archivos de las distintas clases descriptas en el informe, asi como un archivo "main" donde se encuentra el código para testear las distintas estrategias. Para compilar hay un archivo Makefile dentro de esta misma carpeta, si no se mueven los archivos de lugar, debería bastar con correr "$ make" en una terminal para compilar correctamente.
+
+## Ejecución
+Una vez compilado, realizando $ ./gap_simulator en una terminal, podemos correr el archivo.
+
+Por defecto, se devuelve por pantalla la mejor solución obtenida para la instancia real, pero editando el archivo main se pueden realizar principalmente tres cosas con el código:
+-  Guardar los resultados de las instancias de testing "gap" con las distintas estrategias en un archivo .csv.
+- Guardar los resultados de la instancia real con las distintas estrategias en un archivo .csv.
+- Testear, para una sola instancia (benchmark o real) la estrategia deseada. 
+  - Esto incluye las heurísticas por si solas, cada combinacion de heurística con cualquiera de los dos operadores de busqueda local y cada combinacion de heurística con cualquiera de los dos ordenes de operadores para VND.
+
+Las instrucciones para lograr cualquiera de estas tres cosas se encuentran comentadas en el mismo archivo "main.cpp".

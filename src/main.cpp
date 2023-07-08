@@ -277,9 +277,9 @@ int main(int argc, char** argv) {
     // Para ademas usar Local Search con algun operador o VND, descomentar las lineas que definen metaheuristicVnd y en el vector de strings escribir los operadores 
     // a usar en el orden deseado (de querer usar local search con uno solo, escribir solo el operador deseado.).
 
-    // std::string filename = "instances/real/real_instance"; // -> Insertar el path a la instancia deseada.
-    // std::cout << "Reading file \n" << filename << std::endl;
-    // GapInstance instance(filename);
+    std::string filename = "instances/real/real_instance"; // -> Insertar el path a la instancia deseada.
+    std::cout << "Reading file \n" << filename << std::endl;
+    GapInstance instance(filename);
 
     // Selector de Heuristica Constructiva
 
@@ -291,8 +291,8 @@ int main(int argc, char** argv) {
     // greedyBestFit.solve();
     // std::cout << greedyBestFit.getSolution();
 
-    // MartelloTothHeuristic MT(instance);
-    // MT.solve();
+    MartelloTothHeuristic MT(instance);
+    MT.solve();
     // std::cout << MT.getSolution();
 
     // Selector Local Search / VND
@@ -301,9 +301,9 @@ int main(int argc, char** argv) {
 
     // MESSI: Metaheuristic for Efficient Solving using Solution Improvement
 
-    // VND MESSI(instance, MT.getSolution(), {"swap", "relocate"});
-    // MESSI.solve();
-    // std::cout << MESSI.getSolution();
+    VND MESSI(instance, MT.getSolution(), {"swap", "relocate"});
+    MESSI.solve();
+    std::cout << MESSI.getSolution();
 
     return 0;
 }
