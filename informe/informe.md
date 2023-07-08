@@ -183,7 +183,7 @@ Para comparar las distintas estrategias entre sí definimos las siguientes métr
 ## Hipótesis
 
 Planteamos como hipótesis que el operador relocate por si solo probablemente nunca genere ninguna mejora en soluciones generadas por la heurística de distancia mínima, debido a que su función a grandes rasgos es revisar si hay algún depósito factible más cercano al asignado, pero esto no ocurrirá debido a que el funcionamiento de la heurística constructiva es exactamente ese, por lo que si existiese dicho depósito, ya se habría asignado previamente.
-El operador relocate es especialmente útil para poder asignar los vendedores que no fue posible asignar a ningún depósito previamente, teniendo la posibilidad de evitar la alta penalización que estos suponían. 
+El operador relocate es especialmente útil para poder asignar los vendedores que no fue posible asignar a ningún depósito previamente, teniendo la posibilidad de evitar la alta penalización que estos suponían, sobre todo acompañandolo con swap (notar que swap por si solo no puede realizar esto ya que cambiariamos a un asignado por un no asignado, dejando un nuevo no asignado), pues es posible que al realizar intercambios, en algun depósito quede capacidad suficiente para asignar a algún vendedor que no había sido asignado, lo cual es genial ya que la penalidad es como mínimo 3 veces mas grande que el costo de asignar a ese vendedor.
 
 ## Discusión y análisis de resultados
 
@@ -209,7 +209,7 @@ Cada constructiva vs Relocate:
 | b               |                      0 |             0          |                 0 |
 | e               |                      0 |             0.00233594 |                 0 |
 
-**validar hipostesis !!**
+Como habíamos anticipado, el relocate por si solo no genera mejoras en min_cost. En MT es lógico que no genere mejoras, ya que el criterio principal de asignación también busca asignar de la manera que genere costo minimo (localmente, no globalmente, aunque tiene un poco mas en cuenta lo que va a terminar siendo la solución global.)
 
 Cada constructiva vs Swap:
 
@@ -267,7 +267,11 @@ MTHeuristic:
 |  40 |  0.00637205 |          73.6666 |           0.0138893  |                   67.6196 |                   74.313  |
 |  80 |  0.0123502  |          88.5029 |           0.0271206  |                   83.8109 |                   93.7482 |
 
-{interprete pibe}
+Podemos ver como aun en las instancias mas grandes de benchmarking, partiendo de una buena solución inicial (gracias a las heurísticas) nuestra metaheurística no tarda mucho mas de 2 minutos, lo cual en contexto es bastante razonable. 
+
+Cuando iniciamos desde BestFit que resultó funcionar bastante mal para estas instancias si se extiende el tiempo pero no tanto, sigue siendo algo aceptable aunque quizas no lo mas óptimo (10m).
+
+Sin embargo, podemos observar que el tiempo de cómputo en estas instancias grandes es ínfimo, por lo que en la práctica podríamos calcular todas, quedarnos con soluciones iniciales buenas y aplicarle la metaheurística a ellas, para finalmente quedarnos con la mejor asignación de todas, sin tardar tanto tiempo, pues partiendo de buenas soluciones la metaheurística no resultó ser tan costosa.
 
 # Evaluación comparativa de las estrategias en intancia real
 
@@ -283,6 +287,14 @@ Utilizamos las mismas métricas que en benchmarking. Analizaremos los resultados
 
 ![Comparación instancia real partiendo de MTHeuristic](media/mt_real.png)
 
+En las figuras 1, 2 y 3 podemos ver los distintos valores objetivo obtenidos para la instancia real, partiendo desde heuristicas distintas y luego aplicando los distintos valores de busqueda local o las distintas permutaciones de VND. Podemos ver como la mejor heurística, sin aplicar luego busqueda local / VND fue la de MT. La mejor solución en general fue obtenida partiendo de esta última heurística y luego aplicando VND en el orden 1: "Swap", 2: "Relocate".
+
+Podemos ver como bestFit no funcionó muy bien en la instancia real, pero las otras heurísticas dan de entrada soluciones bastante buenas, con un tiempo de cómputo muy bajo.
+
+A medida que vamos reduciendo el valor objetivo, mas cuesta seguir reduciendolo, pues estamos mas cerca del óptimo. A coste de poco menos de un minuto, logramos reducir el valor objetivo a 710 con nuestra mejor combinación. Con tiempos similares y otras estrategias, logramos valores muy cercanos, por lo que quizás en la práctica se podrían tomar las que mejor resultado nos dan para esta instancia (podriamos realizar testing sobre un conjunto mas grande de instancias a ver que resultados obtenemos) y como probar todas será cuestion de unos pocos minutos, podemos quedarnos con la que mejor asignación nos de de todas.
+
+Para entender mejor porqué estas soluciones son de buena calidad y porqué los tiempos son razonables, debemos ponernos del punto de vista de la empresa y entender el contexto.
+
 # Conclusión 
 
 ## Las preguntas de la empresa
@@ -294,7 +306,7 @@ Al inicio de este informe mencionamos las preguntas que quería responder la emp
 para entregar sus paquetes?"
 - "¿Es factible desarrollar una herramienta que nos permita experimentar con distintos escenarios y obtener soluciones de buena calidad en unos pocos minutos?"
 
-Tras múltiples estrategias propuestas y testeo con las mismas, nos encontramos aptos para responder estas preguntas.
+Tras múltiples estrategias propuestas y testeo con las mismas, nos encontramos aptos para responder estas preguntas, y qué mejor manera de ponernos en el punto de vista de la empresa que responder las cuestiones que inquietan a quienes gestionan la misma.
 
 ## Las respuestas
 
