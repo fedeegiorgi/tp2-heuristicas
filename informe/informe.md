@@ -141,6 +141,12 @@ $$c_{kj} < c_{ij}$$
 $$d{kj} \leq \bar{c}_k$$ 
 con $\bar{c}_k$ la capacidad restante del depósito $k$. Luego, repetimos estos pasos para todos los vendedores de la solución.
 
+## Implementaciones y decisiones de diseño
+
+Como mencionamos anteriormente, de $GapSolver$ se derivan también las clases necesarias para los operadores de búsqueda local. Las mismas son $lsRelocateOperator$ y $lsSwapNeighbour$. Cada una de estas herada las variables y métodos de $GapSolver$ e incorporan como método principal $\textit{getBestNeighbour()}$ que devuelve el mejor vecino de los explorados con el operador correspondiente.
+
+Así, para cada operador de búsqueda local tenemos un clase que define a un vecino,$lsRelocateNeighbour$ y $lsSwapNeighbour$. Cada una de estas clases tiene la variable $\textit{delta}$ que indica la diferencia entre la solución inicial y dicho vecino, lo cuál nos servirá para comparar distintos vecinos. A su vez, cada tipo de vecino tiene los índices necesarios para aplicar los cambios en la solución en caso de que alguna sea encontrada.
+
 # Metaheurística: VND
 
 La metaheurística que utilizaremos será VND (Variable Neighborhood Descent), cuya idea principal es tomar una solución inicial factible y buscar mejoras en la misma, recorriendo diferentes vecindarios. Definimos vecindario como todas las soluciones que podemos alcanzar aplicando una vez el operador de busqueda local. 
@@ -177,7 +183,6 @@ Para comparar las distintas estrategias entre sí definimos las siguientes métr
 
     - Es relativa a $estrategia_i$ por lo que $estrategia_j$ es mejor si el valor es positivo y es peor si el valor es negativo.
 
-
 -   Tiempo de ejecución en segundos.
 
 ## Hipótesis
@@ -185,11 +190,9 @@ Para comparar las distintas estrategias entre sí definimos las siguientes métr
 Planteamos como hipótesis que el operador relocate por si solo probablemente nunca genere ninguna mejora en soluciones generadas por la heurística de distancia mínima, debido a que su función a grandes rasgos es revisar si hay algún depósito factible más cercano al asignado, pero esto no ocurrirá debido a que el funcionamiento de la heurística constructiva es exactamente ese, por lo que si existiese dicho depósito, ya se habría asignado previamente.
 El operador relocate es especialmente útil para poder asignar los vendedores que no fue posible asignar a ningún depósito previamente, teniendo la posibilidad de evitar la alta penalización que estos suponían, sobre todo acompañandolo con swap (notar que swap por si solo no puede realizar esto ya que cambiariamos a un asignado por un no asignado, dejando un nuevo no asignado), pues es posible que al realizar intercambios, en algun depósito quede capacidad suficiente para asignar a algún vendedor que no había sido asignado, lo cual es genial ya que la penalidad es como mínimo 3 veces mas grande que el costo de asignar a ese vendedor.
 
-## Discusión y análisis de resultados
+## Análisis de resultados
 
 ###  Comparativa de constructivas:
-
-{interpretar un poco la tabla}
 
 | type_instance   |   ov_mincost_vs_bestfit% |   ov_mincost_vs_mt% |   ov_mt_vs_bestfit% |
 |:----------------|-------------------------:|--------------------:|--------------------:|
@@ -197,9 +200,9 @@ El operador relocate es especialmente útil para poder asignar los vendedores qu
 | b               |                -0.813656 |          0.0433551  |           -0.928853 |
 | e               |                 0.514431 |         -0.0180081  |            0.523833 |
 
-### Swap vs. Relocate
+Notamos que para las instancias de tipo a y b, la heurstica MartelloTothHeuristic y MinCostHeuristic mejoran con respecto a BestFitHeuristic. Sin embargo, para las intancias e 
 
-{interpretar un poco la tabla}
+### Swap vs. Relocate
 
 Cada constructiva vs Relocate:
 
@@ -221,8 +224,6 @@ Cada constructiva vs Swap:
 
 ### Swap vs. VND_1 (relocate, swap)
 
-{interpretar un poco la tabla}
-
 | type_instance   |   mincost_swap_vs_VND1% |   bestfit_swap_vs_VND1% |   mt_swap__vsVND1% |
 |:----------------|------------------------:|------------------------:|-------------------:|
 | a               |             0.000395507 |               0.0722756 |          0         |
@@ -230,8 +231,6 @@ Cada constructiva vs Swap:
 | e               |             0.0574338   |               0.077536  |          0.0460814 |
 
 ### Swap vs. VND_2 (swap, relocate)
-
-{interpretar un poco la tabla}
 
 | type_instance   |   mincost_swap_vs_VND2% |   bestfit_swap_vs_VND2% |   mt_swap__vsVND2% |
 |:----------------|------------------------:|------------------------:|-------------------:|
@@ -281,19 +280,27 @@ Utilizamos las mismas métricas que en benchmarking. Analizaremos los resultados
 
 ## Discusión y análisis de resultados
 
+En las figuras 1, 2 y 3 podemos ver los distintos valores objetivo obtenidos para la instancia real, partiendo desde heuristicas distintas y luego aplicando los distintos valores de busqueda local o las distintas permutaciones de VND. Podemos ver como la mejor heurística, sin aplicar luego busqueda local / VND fue la de MT. La mejor solución en general fue obtenida partiendo de esta última heurística y luego aplicando VND en el orden 1: "Swap", 2: "Relocate".
+
+Podemos ver como bestFit no funcionó muy bien en la instancia real, pero las otras heurísticas dan de entrada soluciones bastante buenas, con un tiempo de cómputo muy bajo.
+
+A medida que vamos reduciendo el valor objetivo, más cuesta seguir reduciendolo, pues estamos mas cerca del óptimo. A coste de poco menos de un minuto, logramos reducir el valor objetivo a 710 con nuestra mejor combinación. Con tiempos similares y otras estrategias, logramos valores muy cercanos, por lo que quizás en la práctica se podrían tomar las que mejor resultado nos dan para esta instancia (podriamos realizar testing sobre un conjunto mas grande de instancias a ver que resultados obtenemos) y como probar todas será cuestion de unos pocos minutos, podemos quedarnos con la que mejor asignación nos de de todas.
+
+Para entender mejor porqué estas soluciones son de buena calidad y porqué los tiempos son razonables, debemos ponernos del punto de vista de la empresa y entender el contexto.
+
 ![Comparación instancia real partiendo de MinCostHeuristic](media/mincost_real.png)
 
 ![Comparación instancia real partiendo de BestFitHeuristic](media/bestfit_real.png)
 
 ![Comparación instancia real partiendo de MTHeuristic](media/mt_real.png)
 
-En las figuras 1, 2 y 3 podemos ver los distintos valores objetivo obtenidos para la instancia real, partiendo desde heuristicas distintas y luego aplicando los distintos valores de busqueda local o las distintas permutaciones de VND. Podemos ver como la mejor heurística, sin aplicar luego busqueda local / VND fue la de MT. La mejor solución en general fue obtenida partiendo de esta última heurística y luego aplicando VND en el orden 1: "Swap", 2: "Relocate".
-
-Podemos ver como bestFit no funcionó muy bien en la instancia real, pero las otras heurísticas dan de entrada soluciones bastante buenas, con un tiempo de cómputo muy bajo.
-
-A medida que vamos reduciendo el valor objetivo, mas cuesta seguir reduciendolo, pues estamos mas cerca del óptimo. A coste de poco menos de un minuto, logramos reducir el valor objetivo a 710 con nuestra mejor combinación. Con tiempos similares y otras estrategias, logramos valores muy cercanos, por lo que quizás en la práctica se podrían tomar las que mejor resultado nos dan para esta instancia (podriamos realizar testing sobre un conjunto mas grande de instancias a ver que resultados obtenemos) y como probar todas será cuestion de unos pocos minutos, podemos quedarnos con la que mejor asignación nos de de todas.
-
-Para entender mejor porqué estas soluciones son de buena calidad y porqué los tiempos son razonables, debemos ponernos del punto de vista de la empresa y entender el contexto.
+| Estrategia          |  Tiempo (s) |
+|:--------------------|------------:|
+| st_mt               |  0.00686994 |
+| st_mt_relocate      |  0.0595409  |
+| st_mt_swap          | 48.0939     |
+| st_mt_relocate_swap | 50.1151     |
+| st_mt_swap_relocate | 55.6406     |
 
 # Conclusión 
 
